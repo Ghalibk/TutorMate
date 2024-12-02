@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #133E87, #608BC1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+  
+.container {
+    background-color: #F3F3E0;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    padding: 30px 20px;
+    text-align: center;
+}
+  
+.header {
+    margin-bottom: 20px;
+}
+  
+.header .text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+  
+.header .underline {
+    width: 100px;
+    height: 4px;
+    background-color: #6a11cb;
+    margin: 8px auto;
+}

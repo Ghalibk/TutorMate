@@ -1,0 +1,51 @@
+.Todo {
+    background-color: #F3F3E0; /* Light cream background */
+    border: 2px solid #CBDCEB; /* Light blue border */
+    border-radius: 10px;
+    padding: 20px;
+    width: 700px;
+    margin: 15px auto; /* Center it */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .Todo .Title {
+    color: #133E87; /* Deep blue */
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  
+  .Todo .description {
+    font-size: 16px;
+    color: #608BC1; /* Medium blue */
+    margin-bottom: 20px;
+    line-height: 1.5; /* Improve readability */
+  }
+  
+  .Todo .ShowSteps {
+    background-color: #133E87; /* Deep blue background */
+    color: #F3F3E0; /* Light cream text */
+    font-size: 16px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .Todo .ShowSteps:hover {
+    background-color: #608BC1; /* Lighter blue on hover */
+    transform: scale(1.05); /* Slightly enlarge */
+  }
+  
+  .Todo .ShowSteps:active {
+    background-color: #133E87; /* Return to original deep blue */
+    transform: scale(1); /* Reset scale */
+  }
+  @media (max-width: 768px) {
+    .Todo {
+      width: 90%; /* Full width for smaller screens */
+    }
+  }
+    

@@ -1,0 +1,46 @@
+.dashboard {
+  display: flex;
+  height: 100vh; 
+  width: 100vw; 
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+  
+  .main {
+    flex: 1;
+    padding: 20px;
+    background-color: #F3F3E0; 
+    box-shadow: -1px 0px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+  
+  .content {
+    margin-top: 20px;
+    color: #133E87;
+    margin: 10px;
+  }
+  
+  h1, p {
+    margin: 0;
+  }
+  
+  
+
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%; /* Sidebar spans the full width */
+        gap: 10px;
+    }
+
+    .sidebar li {
+        font-size: 14px;
+    }
+
+    .sidebar h2 {
+        font-size: 16px;
+    }
+
+  
+}
+

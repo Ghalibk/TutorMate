@@ -1,0 +1,173 @@
+/* Calendar container */
+.rbc-calendar {
+    background-color: transparent !important; /* Transparent background for the calendar */
+    color:black !important;
+    font-family: Arial, sans-serif;
+    border: none;
+}
+
+/* Header (Month, Week, Day view) */
+.rbc-header {
+    background-color: #333 !important;  /* Dark background for header */
+    color: white !important;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Day cells background */
+.rbc-day-bg {
+    background-color: #608BC1 !important;  /* Dark background for each day */
+}
+
+/* Selected day background */
+.rbc-day-selected {
+    background-color: #2980b9 !important; /* Highlighted color for selected day */
+}
+
+/* Event background */
+.rbc-event {
+    background-color: #e74c3c !important; /* Red background for events */
+    color: white !important;  /* White text for events */
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+/* Hover effect for events */
+.rbc-event:hover {
+    background-color: #c0392b !important; /* Darker red on hover */
+}
+
+/* Event tooltip styles */
+.rbc-event-label {
+    font-size: 12px;
+    color: white !important;
+}
+
+/* Styling for the navigation arrows */
+.rbc-btn-group button {
+    background-color: #2980b9 !important;
+    color: white !important;
+    border: none;
+    font-size: 14px;
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 4px;
+
+}
+
+.rbc-btn-group button:hover {
+    background-color: #3498db !important;
+}
+
+/* View buttons (Day, Week, Month) */
+.rbc-toolbar button {
+    background-color: #2980b9 !important;
+    color: white !important;
+    padding: 5px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+
+
+}
+
+.rbc-toolbar button:hover {
+    background-color: #3498db !important;
+}
+
+/* Today's date style */
+.rbc-today {
+    border: 2px solid #2980b9 !important;
+    background-color: #34495e !important;
+    color: white !important;
+}
+
+/* Style for all-day events */
+.rbc-allday-cell {
+    background-color: #2c3e50 !important;
+    color: white !important;
+}
+
+/* Hover effect for day cells */
+.rbc-day:hover {
+    background-color: #34495e !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .rbc-calendar {
+        font-size: 14px;
+    }
+    
+    .rbc-header {
+        font-size: 16px;
+    }
+
+    .rbc-event {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+
+    .rbc-btn-group button {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .rbc-toolbar button {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .rbc-calendar {
+        font-size: 12px;
+    }
+    
+    .rbc-header {
+        font-size: 14px;
+    }
+
+    .rbc-event {
+        font-size: 8px;
+        padding: 3px 6px;
+    }
+
+    .rbc-btn-group button {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .rbc-toolbar button {
+        font-size: 10px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rbc-calendar {
+        font-size: 10px;
+    }
+    
+    .rbc-header {
+        font-size: 12px;
+    }
+
+    .rbc-event {
+        font-size: 8px;
+        padding: 2px 4px;
+    }
+
+    .rbc-btn-group button {
+        font-size: 8px;
+        padding: 2px 4px;
+    }
+
+    .rbc-toolbar button {
+        font-size: 8px;
+        padding: 4px;
+    }
+}

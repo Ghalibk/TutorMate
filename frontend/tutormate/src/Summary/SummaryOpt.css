@@ -1,0 +1,54 @@
+.Options {
+    background-color: #F3F3E0; 
+    border: 2px solid #CBDCEB; 
+    border-radius: 10px; 
+    padding: 20px;
+    width: 300px;
+    margin: 20px auto; 
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
+}
+
+.Title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #133E87;
+    margin-bottom: 20px;
+}
+
+button {
+    display: block; 
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #F3F3E0; 
+    background: linear-gradient(135deg, #133E87, #608BC1); 
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: all 0.3s ease; 
+}
+
+button:hover {
+    background: linear-gradient(135deg, #608BC1, #133E87); 
+    transform: translateY(-2px); 
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #CBDCEB; 
+}
+
+
+@media (max-width: 768px) {
+    .Options {
+        width: 90%;
+        padding: 15px;
+    }
+
+    button {
+        font-size: 14px; 
+    }
+}

@@ -1,0 +1,86 @@
+.Module {
+    background-color: #F3F3E0; /* Light cream background */
+    border: 2px solid #608BC1; /* Medium blue border */
+    border-radius: 12px; /* Smooth rounded corners */
+    padding: 20px;
+    margin: 20px auto; /* Center align */
+    width: 80%; /* Responsive width */
+    max-width: 600px; /* Restrict width on large screens */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    font-family: 'Arial', sans-serif;
+    color: #133E87; /* Deep blue text */
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #133E87; /* Deep blue title */
+    margin-bottom: 20px;
+    text-align: center; /* Center-align title for emphasis */
+}
+
+.CheckBoxes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between checkboxes */
+    color: #133E87; /* Consistent text color for labels */
+    font-size: 18px; /* Slightly larger font for readability */
+}
+
+.CheckBoxes input {
+    accent-color: #608BC1; /* Custom checkbox color */
+    cursor: pointer;
+    margin-right: 10px; /* Space between the checkbox and label */
+}
+
+.CheckBoxes label {
+    font-weight: 500; /* Medium font weight for labels */
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for the Next button */
+.Next {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px; /* Button padding for size */
+    background: linear-gradient(135deg, #133E87, #608BC1); /* Gradient blue background */
+    color: #F3F3E0; /* Light cream text */
+    font-size: 16px; /* Medium font size */
+    font-weight: bold; /* Bold text for emphasis */
+    border: none; /* Remove default button border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.Next:hover {
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
+}
+
+.Next:active {
+    transform: translateY(0); /* Reset lift on click */
+    box-shadow: none; /* Remove shadow on click */
+}
+
+/* Optional: Add responsiveness */
+@media (max-width: 768px) {
+    .Module {
+        padding: 15px;
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    .title {
+        font-size: 20px; /* Slightly smaller title */
+    }
+
+    .CheckBoxes {
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
+
+    .Next {
+        font-size: 14px; /* Slightly smaller button text */
+        padding: 8px 16px; /* Adjust padding */
+    }
+}

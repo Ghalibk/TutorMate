@@ -1,0 +1,57 @@
+.Profile {
+    background-color: #F3F3E0; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    width: 400px; 
+    padding: 20px;
+    margin: 20px auto; 
+    text-align: center;
+    font-family: Arial, sans-serif; 
+    color: #333; 
+}
+
+.Profile-Pic {
+    width: 120px; 
+    height: 120px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 3px solid #608BC1; 
+    margin-bottom: 15px; 
+}
+
+.Profile-Info {
+    text-align: left; 
+    padding: 10px;
+}
+
+.Profile-name,
+.Profile-id,
+.Profile-Contact,
+.Profile-Semester {
+    margin: 10px 0; 
+    font-size: 16px; 
+    color: #3C3A3A; 
+}
+
+.Profile-name {
+    font-weight: bold; 
+    color: #6C584C; 
+}
+
+.Profile-id,
+.Profile-Contact,
+.Profile-Semester {
+    font-weight: normal; 
+}
+
+.Profile:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+}
+
+@media (max-width: 768px) {
+    .Profile {
+        width: 90%; /* Shrinks for smaller screens */
+    }
+}

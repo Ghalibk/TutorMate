@@ -1,0 +1,63 @@
+.FlashcardWrapper * {
+    box-sizing: border-box;
+  }
+  
+  .FlashcardWrapper {
+    bottom: 10%;
+    clear: left;
+    perspective: 1000px;
+    width: 560px;
+    height: 340px;
+    transform: none !important;
+    position: relative;
+    
+  }
+  
+  .FlashcardWrapper__item {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    background-color: transparent;
+    transition: transform 0.45s ease;
+  }
+  
+  .FlashcardWrapper__item--front,
+  .FlashcardWrapper__item--back {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    position: absolute;
+    border-radius: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    text-align: center;
+    box-shadow: 0 0 2.5rem 0 rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+  }
+  
+  .FlashcardWrapper__item--front {
+    background-color: #608BC1;
+  }
+  
+  .FlashcardWrapper__item--back {
+    background-color: #608BC1;
+    transform: rotateX(-180deg);
+  }
+  
+  .FlashcardWrapper__item--flip {
+    transform: rotateX(180deg) !important;
+  }
+  
+  .FlashcardWrapper__item--content {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+  }
+  

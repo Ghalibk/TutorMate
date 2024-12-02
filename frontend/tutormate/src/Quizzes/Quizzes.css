@@ -1,0 +1,149 @@
+/* General container styling */
+.quizzes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: rgb(243, 243, 224); /* Light cream background */
+  font-family: 'Arial', sans-serif;
+  color: rgb(19, 62, 135); /* Dark blue text color */
+  text-align: center;
+}
+
+h2 {    
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: rgb(19, 62, 135); /* Dark blue */
+}
+
+/* Quiz form styles */
+.quiz-form {
+  background: rgb(203, 220, 235); /* Soft blue-gray background */
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+  color: rgb(19, 62, 135); /* Dark blue text */
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+  color: rgb(19, 62, 135); /* Dark blue */
+}
+
+.input-select,
+.input-number {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgb(96, 139, 193); /* Medium blue border */
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease-in-out;
+  background-color: rgb(243, 243, 224); /* Light cream background */
+  color: rgb(19, 62, 135); /* Dark blue text */
+}
+
+.input-select:focus,
+.input-number:focus {
+  border-color: rgb(19, 62, 135); /* Dark blue on focus */
+  outline: none;
+  box-shadow: 0 0 5px rgba(19, 62, 135, 0.5);
+}
+
+.btn-generate {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: rgb(19, 62, 135); /* Dark blue button */
+  color: rgb(243, 243, 224); /* Light cream text */
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.btn-generate:hover {
+  background: rgb(96, 139, 193); /* Medium blue on hover */
+}
+
+.quiz-generated {
+  background: rgb(203, 220, 235); /* Soft blue-gray background */
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+  color: rgb(19, 62, 135); /* Dark blue text */
+}
+
+h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: rgb(19, 62, 135); /* Dark blue */
+}
+
+.quiz-generated p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: rgb(19, 62, 135); /* Dark blue */
+}
+
+.btn-reset {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: rgb(96, 139, 193); /* Medium blue button */
+  color: rgb(243, 243, 224); /* Light cream text */
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.btn-reset:hover {
+  background: rgb(19, 62, 135); /* Dark blue on hover */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 2rem;
+  }
+
+  .quiz-form,
+  .quiz-generated {
+    padding: 20px;
+    width: 90%;
+  }
+
+  .btn-generate,
+  .btn-reset {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .btn-generate,
+  .btn-reset {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+}

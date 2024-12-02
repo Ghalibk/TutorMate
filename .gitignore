@@ -1,0 +1,31 @@
+# Ignore compiled code and logs
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django-related files
+db.sqlite3
+media/
+
+# Node.js dependencies
+frontend/tutormate/node_modules/
+
+# Build output for the frontend
+frontend/tutormate/dist/
+
+# Environment variables and sensitive files
+.env
+tokens.py
+downloads/
+
+# Python version file
+.python-version
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db

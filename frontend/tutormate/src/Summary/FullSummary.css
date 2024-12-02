@@ -1,0 +1,46 @@
+.FullSum {
+    background-color: #F3F3E0; /* Light cream background */
+    border: 3px solid #608BC1; /* Medium blue border for distinction */
+    border-radius: 12px; /* Slightly larger rounded corners */
+    padding: 25px;
+    margin: 20px auto; /* Center align */
+    width: 85%; /* Responsive width */
+    height: auto;
+    max-width: 800px; /* Wider container for full summaries */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+    color: #133E87; /* Deep blue text for content */
+    font-family: 'Arial', sans-serif; /* Consistent, modern font */
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #133E87; /* Deep blue title */
+    margin-bottom: 20px;
+    text-align: left; /* Align to the left for a formal layout */
+    text-decoration: underline; /* Optional: to emphasize the title */
+}
+
+.summary {
+    font-size: 18px;
+    line-height: 1.8; /* Generous line height for readability */
+    color: #333; /* Neutral gray for text contrast */
+    text-align: justify; /* Align text evenly */
+    word-wrap: break-word; /* Ensure long words don’t break layout */
+}
+
+/* Optional: Add responsiveness */
+@media (max-width: 768px) {
+    .FullSum {
+        padding: 20px;
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    .title {
+        font-size: 22px; /* Slightly smaller title */
+    }
+
+    .summary {
+        font-size: 16px; /* Adjust text size for small screens */
+    }
+}

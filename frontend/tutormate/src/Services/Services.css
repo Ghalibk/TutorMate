@@ -1,0 +1,70 @@
+/* Services.css */
+
+.Services {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background-color: #CBDCEB; /* Light blue background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .Services > div {
+    flex: 1;
+    text-align: center;
+    background-color: #F3F3E0; /* Light cream for the cards */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .Services > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .Services img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background-color: #608BC1; /* Placeholder for images */
+  }
+  
+  .Services h3 {
+    font-size: 18px;
+    color: #133E87; /* Deep blue for headings */
+    margin: 10px 0;
+  }
+  
+  .Services p {
+    font-size: 14px;
+    color: #133E87;
+    margin: 10px 0;
+  }
+  
+  .Services button {
+    padding: 10px 20px;
+    background-color: #608BC1; /* Lighter blue for buttons */
+    color: #F3F3E0; /* Light cream for text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .Services button:hover {
+    background-color: #133E87; /* Deep blue on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .Services {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  
