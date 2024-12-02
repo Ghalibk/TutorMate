@@ -14,7 +14,7 @@ function Dashboard() {
         <SearchBar />
         <div className="content">
           <h1>Welcome to the Dashboard</h1>
-          <Courses CourseID="CSC 3324 01" CourseName="Software Engineering I" CourseSemester="FA24"></Courses>
+          <Courses></Courses>
           <Courses></Courses>
           <Courses></Courses>
           <Courses></Courses>
