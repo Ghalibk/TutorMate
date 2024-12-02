@@ -100,42 +100,19 @@ class CanvasConnexion:
             return None
         
     def sanitize_file_name(self, file_name, max_length=100):
-        """
-        Sanitizes a file name by removing invalid characters and limiting length.
-        
-        Args:
-            file_name (str): The original file name.
-            max_length (int): The maximum length of the sanitized file name.
-        
-        Returns:
-            str: The sanitized file name.
-        """
-        # Ensure file_name is a string
         if not isinstance(file_name, str):
             file_name = str(file_name)
         
-        # Remove invalid characters
         sanitized = re.sub(r'[<>:"/\\|?*]', '', file_name)
-
-        # Truncate to max_length
         if len(sanitized) > max_length:
             sanitized = sanitized[:max_length]
 
         return sanitized
         
     def getCourseModules(self, course_id):
-        """
-        Retrieves modules from a course.
-        
-        Args:
-            course_id (int): The ID of the course.
-        
-        Returns:
-            list: A list of modules with their items, or None if an error occurs.
-        """
         url = f"{CanvasConnexion.canvas_base_url}/api/v1/courses/{course_id}/modules"
         params = {
-            "include": ["items"]  # Include module items in the response
+            "include": ["items"]
         }
         response = requests.get(url, headers=self.headers, params=params)
 
@@ -152,16 +129,6 @@ class CanvasConnexion:
 
     
     def downloadModuleFiles(self, course_id, download_path):
-        """
-        Downloads all files from the modules of a given course.
-        
-        Args:
-            course_id (int): The ID of the course.
-            download_path (str): The directory where files will be saved.
-        
-        Returns:
-            None
-        """
         modules = self.getCourseModules(course_id)
 
         if not modules:
@@ -176,7 +143,7 @@ class CanvasConnexion:
 
             for item in module.get("items", []):
                 if item.get("type") == "File":
-                    metadata_url = item.get("url")  # Metadata URL for the file
+                    metadata_url = item.get("url") 
                     file_name = self.sanitize_file_name(item.get("title", "Unnamed File"))
 
                     if metadata_url:
@@ -185,10 +152,9 @@ class CanvasConnexion:
 
                         if metadata_response.status_code == 200:
                             metadata = metadata_response.json()
-                            download_url = metadata.get("url")  # Actual download URL
+                            download_url = metadata.get("url")
                             print(f"Downloading file from: {download_url}")
 
-                            # Download the actual file
                             file_response = requests.get(download_url, headers=self.headers, stream=True)
                             
                             if file_response.status_code == 200:
@@ -236,60 +202,3 @@ for course in canvas.getCourses():
     path = f"./downloads/{course['id']}"
     print(f"Course Name: {course['name']}, ID: {course['id']}")
     canvas.downloadModuleFiles(course['id'], path)
-
-'''# Headers for authorization
-headers = {
-    "Authorization": f"Bearer {api_token}"
-}
-
-# Endpoint to get the courses
-url = f"{canvas_base_url}/api/v1/courses"
-
-# Parameters to filter the courses
-params = {
-    "enrollment_type": "student",  # Get courses where you are enrolled as a student
-    "enrollment_state": "active",  # Only active enrollments
-    "include": ["term"]            # Include additional information, like the term
-}
-
-# Make the GET request
-response = requests.get(url, headers=headers, params=params)
-
-# Check for a successful response
-if response.status_code == 200:
-    courses = response.json()
-    print("Courses you're taking:")
-    for course in courses:
-        print(f"- {course['name']} (ID: {course['id']})")
-else:
-    print(f"Failed to retrieve courses: {response.status_code}")
-    print(response.text)
-
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-string = "Hello world"
-
-print(string[0])
