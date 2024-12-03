@@ -179,7 +179,6 @@ class CanvasConnexion:
 
 
 
-
 canvas = CanvasConnexion(tokens.ghali_token)
 
 todo_assignments = canvas.getToDoAssignments()
