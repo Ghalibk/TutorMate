@@ -64,21 +64,35 @@ class Todo(models.Model):
     def __str__(self):
         return f"{self.assignment_name} ({self.due_date})"
 
-# Material model
+# # Material Model
 class Material(models.Model):
     material_id = models.AutoField(primary_key=True)
-    path = models.TextField()
+    path = models.TextField()  # File path or URL
+    file_type = models.CharField(max_length=10, null=True, blank=True)  # E.g., 'pdf', 'pptx', 'docx'
+    content = models.TextField(null=True, blank=True)  # Extracted content for processing
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Material for {self.user.first_name} {self.user.last_name}"
+        return f"Material: {self.path} (Uploaded by {self.user.first_name})"
+
+# # UploadedFile Model
+# class UploadedFile(models.Model):
+#     file_id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=255)  # Original filename
+#     file = models.FileField(upload_to='uploads/')  # Save to the "uploads" directory
+#     file_type = models.CharField(max_length=10)  # E.g., 'pdf', 'pptx', 'docx'
+#     content = models.TextField(null=True, blank=True)  # Extracted text from file
+    uploaded_at = models.DateTimeField(auto_now_add=True)  # Timestamp of upload
+
+    def __str__(self):
+        return self.name
 
 # Quiz model
 class Quiz(models.Model):
     quiz_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, null=True, blank=True)  # Optional link to Material
     def __str__(self):
         return self.title
 

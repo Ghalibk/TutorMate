@@ -3,20 +3,23 @@
 '''
 
 # Django Imports
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
 from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 # REST Framework Imports
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Application Imports
-from .models import User, Course, Enroll
+from .models import Course, Enroll, UploadedFile, User
 from .sync import canvasSync
-from .utils import summarize_course  # Import the summarization function
+from .utils import process_file_content, summarize_course, generate_quiz  # Utility functions
 
 # External Imports
 import json
@@ -211,10 +214,40 @@ def react_view(request, path=None):
     with open(index_path, 'r') as f:
         return HttpResponse(f.read(), content_type='text/html')
 
-class SummarizeCourseView(APIView):
-    def post(self, request):
-        """
-        Summarizes the course content provided in the POST request.
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST':
+        if 'file' not in request.FILES:
+            return JsonResponse({'status': 'error', 'message': 'No file uploaded.'}, status=400)
 
-        Expects 'content' field in the request body with the course material.
-        Returns the summarized content in the response.
+        file = request.FILES['file']
+        file_extension = os.path.splitext(file.name)[1].lower()
+
+        if file_extension not in ['.pptx', '.pdf', '.docx']:
+            return JsonResponse({'status': 'error', 'message': 'Invalid file type.'}, status=400)
+
+        # Save file temporarily
+        temp_file_path = default_storage.save(f'temp/{file.name}', ContentFile(file.read()))
+        full_temp_path = default_storage.path(temp_file_path)
+
+        try:
+            # Extract text from the file
+            extracted_text = extract_text_from_file(full_temp_path, file_extension)
+
+            # Generate quiz from the extracted content
+            quiz = generate_quiz(extracted_text)  # Using generate_quiz from util.py
+
+            # Return the extracted text and the generated quiz in the response
+            return JsonResponse({
+                'status': 'success', 
+                'text': extracted_text, 
+                'quiz': quiz
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        finally:
+            # Clean up temporary file
+            if os.path.exists(full_temp_path):
+                os.remove(full_temp_path)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)

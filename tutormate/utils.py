@@ -1,27 +1,22 @@
 import openai
-from django.conf import settings
+import os
+from dotenv import load_dotenv
 import logging
+
+# Load environment variables from the .env file
+load_dotenv()
 
 # Set up logging for error tracking
 logger = logging.getLogger(__name__)
 
-# Ensure you load the API key from your settings
-openai.api_key = settings.OPENAI_API_KEY
+# Ensure you load the API key from the environment
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+if not openai.api_key:
+    logger.error("OpenAI API key is missing.")
+    raise ValueError("OpenAI API key is missing from environment variables.")
 
 def safe_openai_call(prompt, engine="text-davinci-003", max_tokens=300, temperature=0.7):
-    """
-    Makes a safe call to the OpenAI API with the provided parameters.
-    Handles errors and logs them.
-
-    Args:
-        prompt (str): The input text for OpenAI's model.
-        engine (str): The OpenAI model to use (default: "text-davinci-003").
-        max_tokens (int): The maximum number of tokens for the response (default: 300).
-        temperature (float): Controls randomness in the output (default: 0.7).
-
-    Returns:
-        str: The OpenAI response or an error message.
-    """
     try:
         response = openai.Completion.create(
             engine=engine,
@@ -29,6 +24,9 @@ def safe_openai_call(prompt, engine="text-davinci-003", max_tokens=300, temperat
             max_tokens=max_tokens,
             temperature=temperature,
         )
+        if not response.choices:
+            logger.error(f"OpenAI API returned an empty response for prompt: {prompt}")
+            return "No response from the AI."
         return response.choices[0].text.strip()
     except openai.error.OpenAIError as e:
         logger.error(f"OpenAI API error: {e}")
@@ -37,51 +35,28 @@ def safe_openai_call(prompt, engine="text-davinci-003", max_tokens=300, temperat
 def generate_quiz(topic):
     """
     Generates a quiz about the specified topic.
-
-    Args:
-        topic (str): The topic for the quiz.
-
-    Returns:
-        str: The generated quiz or an error message.
     """
     if not topic:
         return "Topic is required to generate a quiz."
     prompt = f"Create a quiz about {topic}. Include multiple-choice questions."
     return safe_openai_call(prompt)
 
-def summarize_course(content):
+def generate_todo_help(content):
     """
-    Summarizes the provided course content.
-
-    Args:
-        content (str): The course content to summarize.
-
-    Returns:
-        str: The summarized content or an error message.
+    Generates steps or help for the to-do list based on the extracted content.
     """
     if not content:
-        return "Course content is required for summarization."
-    prompt = f"Summarize the following course content:\n\n{content}"
+        return "Content is required for generating to-do help."
+    prompt = f"Generate steps to complete the task based on the following content:\n\n{content}"
     return safe_openai_call(prompt)
 
-def generate_study_schedule(preferred_times, topics, total_hours):
+def process_with_ai(extracted_text):
     """
-    Generates a study schedule based on preferred times, topics, and total hours.
-
-    Args:
-        preferred_times (list): A list of preferred time slots.
-        topics (list): A list of topics to study.
-        total_hours (int): The total number of hours available for study.
-
-    Returns:
-        dict: A dictionary with the schedule or an error message.
+    Passes the extracted content to the AI model.
     """
-    if not topics or not preferred_times or total_hours <= 0:
-        return "Invalid input! Ensure topics, preferred times, and total hours are valid."
-    
-    hours_per_topic = total_hours // len(topics)
-    schedule = {}
-    for i, topic in enumerate(topics):
-        time_slot = preferred_times[i % len(preferred_times)]
-        schedule.setdefault(time_slot, []).append(f"{topic} ({hours_per_topic} hours)")
-    return schedule
+    ai_quiz = generate_quiz(extracted_text)
+    ai_todo_help = generate_todo_help(extracted_text)
+    return {
+        'quiz': ai_quiz,
+        'todo_help': ai_todo_help
+    }
