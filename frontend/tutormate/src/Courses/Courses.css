@@ -29,17 +29,11 @@
     border: 2px solid #CBDCEB; /* Light blue border around the image */
   }
   
-  .Course-code,
   .Course-name,
   .Course-semester {
     color: #133E87; /* Deep blue text */
     font-family: 'Arial', sans-serif;
     margin: 10px 0;
-  }
-  
-  .Course-code {
-    font-size: 18px;
-    font-weight: bold;
   }
   
   .Course-name {
@@ -64,10 +58,6 @@
 }
 
 @media (max-width: 480px) {
-    .Course-code {
-        font-size: 16px;
-    }
-
     .Course-name {
         font-size: 14px;
     }

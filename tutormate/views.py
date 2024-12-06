@@ -8,8 +8,13 @@ from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .models import User
+from .models import Course
+from .models import Enroll
+import json
 import os
-import re
+from .sync import canvasSync
+from canvas import *
 
 import requests
 
@@ -84,23 +89,13 @@ def get_user_info(request):
     name = ""
     email = ""
     if request.user.is_authenticated:
-        graph_token = get_graph_token()
-        if graph_token:
-            user_url = f"https://graph.microsoft.com/v1.0/users/{request.user.username}"
-            headers = {
-                "Authorization": f"Bearer {graph_token['access_token']}",
-                "Content-Type": "application/json",
-            }
-            user_response = requests.get(url=user_url, headers=headers).json()
-            match = re.search(r"<\s*(\d+)\s*>", user_response['displayName'])
-            if match:
-                id = match.group(1)
-            name = user_response['givenName'] + ' ' + user_response['surname']
-            mail = user_response['mail']
+        id = request.session["id"]
+        name = request.session["first_name"] + ' ' + request.session["last_name"]
+        email = request.session["email"]
     data = {
         'id': id,
         'name': name,
-        'email': mail,
+        'email': email,
     }
     return JsonResponse(data)
 
@@ -111,13 +106,98 @@ def login(request):
 
 @api_view(['GET'])
 def fetch_courses(request):
-    data = {
-        'courseID': 'CSC 3351 02',
-        'courseName': 'Operating Systems',
-        'courseSem': 'FA 24',
-    }
-    return Response(data)
+    # Ensure user is authenticated
+    if not request.user.is_authenticated:
+        return Response({"status": "error", "message": "User is not authenticated"}, status=401)
 
+    try:
+        # Get user info from the session
+        user = User.objects.get(user_id=request.session["id"])
+
+        # Fetch courses from the database
+        courses = Course.objects.all()  # You can add any filters if necessary
+        course_data = []
+
+        for course in courses:
+            # Fetch the enrollment data for the user and course using user_id and course_id
+            enrollment = Enroll.objects.filter(user=user, course=course).first()
+
+            if enrollment:
+                course_details = {
+                    "id": course.course_id,
+                    "name": course.name,
+                    "term_name": course.term_name,
+                    "image_url": course.image_url,
+                    "overall_grade": enrollment.letter_grade,
+                }
+                course_data.append(course_details)
+
+        if course_data:
+            print(course_data)
+            return Response(course_data)
+        else:
+            return Response({"status": "error", "message": "No courses found."}, status=404)
+
+    except:
+        return Response({"status": "error", "message": "User not found in the database."}, status=404)
+
+def check_canvas_token(request):
+    if request.user.is_authenticated:
+        try:
+            # Fetch the User object for the logged-in user
+            user = User.objects.get(user_id=request.session["id"])
+
+            # Check if canvas_token is null or initialized
+            token_status = "initialized" if user.canvas_token else "null"
+            if(token_status == "initialized"):
+                if(not CanvasConnexion(user.canvas_token).is_token_valid()):
+                    token_status = "not valid"
+            response = {
+                "status": "success",
+                "token_status": token_status,
+            }
+        except User.DoesNotExist:
+            # Handle case where the User does not exist in the database
+            response = {
+                "status": "error",
+                "message": "User not found in the database."
+            }
+
+    return JsonResponse(response)
+
+def validate_canvas_token(request):
+    if request.method == "POST":
+        try:
+            # Parse the token from the request body
+            data = json.loads(request.body)
+            canvas_token = data.get("token")
+
+            if not canvas_token:
+                return JsonResponse({"status": "error", "message": "Token is required."}, status=400)
+
+            # Validate the token using CanvasConnexion
+            is_valid = CanvasConnexion(canvas_token).is_token_valid()
+
+            if is_valid:
+                # Update the user's canvas_token in the database
+                if request.user.is_authenticated:
+                    try:
+                        user = User.objects.get(user_id=request.session["id"])
+                        user.canvas_token = canvas_token
+                        user.save()
+                        canvasSync(request.session["id"])
+                        return JsonResponse({"status": "success", "message": "Token is valid."})
+                    except User.DoesNotExist:
+                        return JsonResponse({"status": "error", "message": "User not found in the database."}, status=404)
+                else:
+                    return JsonResponse({"status": "error", "message": "User is not authenticated."}, status=401)
+            else:
+                return JsonResponse({"status": "error", "message": "Token is not valid."}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON format."}, status=400)
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
 
 def react_view(request, path=None):
     # Serve the React app's index.html for all frontend routes

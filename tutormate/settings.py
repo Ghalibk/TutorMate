@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_auth_adfs',
     'frontend.apps.FrontendConfig',
     'django_extensions',
+    'tutormate',
 ]
 
 MIDDLEWARE = [
