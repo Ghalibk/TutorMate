@@ -1,22 +1,28 @@
 '''
     Views to access Microsoft Graph API for user details.
 '''
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import JsonResponse
+
+# Django Imports
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from django.shortcuts import redirect
+
+# REST Framework Imports
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import User
-from .models import Course
-from .models import Enroll
+from rest_framework.views import APIView
+from rest_framework import status
+
+# Application Imports
+from .models import User, Course, Enroll
+from .sync import canvasSync
+from .utils import summarize_course  # Import the summarization function
+
+# External Imports
 import json
 import os
-from .sync import canvasSync
-from canvas import *
-
 import requests
+from canvas import *
 
 def get_graph_token():
     '''Get token from Microsoft AAD URL.'''
@@ -204,3 +210,11 @@ def react_view(request, path=None):
     index_path = os.path.join(settings.BASE_DIR, 'frontend/tutormate/dist', 'index.html')
     with open(index_path, 'r') as f:
         return HttpResponse(f.read(), content_type='text/html')
+
+class SummarizeCourseView(APIView):
+    def post(self, request):
+        """
+        Summarizes the course content provided in the POST request.
+
+        Expects 'content' field in the request body with the course material.
+        Returns the summarized content in the response.

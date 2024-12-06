@@ -167,3 +167,12 @@ AUTH_ADFS = {
     'TENANT_ID': TENANT_ID,
     'RELYING_PARTY_ID': CLIENT_ID,
 }
+
+# OpenAI API key (for integrating AI functionalities)
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Security settings
+
+# SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
+# CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True') == 'True'
+# SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True') == 'True'
