@@ -18,6 +18,11 @@ import CalendarView from "./Calendar/CalendarView";
 import Quizzes from "./Quizzes/Quizzes.jsx";
 import OutlookButton from "./OutlookButton/OutlookButton.jsx"
 import LoginFormPage from "./LoginFormPage/LoginFormPage.jsx";
+import PastWork from "./PastWork/PastWork.jsx";
+import ViewPastQuiz from "./PastWork/ViewPastQuiz.jsx";
+import ViewPastSummary from "./PastWork/ViewPastSummary.jsx";
+import DisplayQuiz from "./PastWork/DisplayQuiz.jsx";
+import DisplaySummary from "./PastWork/DisplaySummary.jsx";
 import "./App.css";
 
 function App() {
@@ -42,6 +47,11 @@ function App() {
         <Route path="/flashcardspage" element={<FlashcardsPage />} />
         <Route path="/calendarview" element={<CalendarView />} />
         <Route path="/quizzes" element={<Quizzes />} />
+        <Route path="/pastwork" element={<PastWork />} />
+        <Route path="/viewpastquiz" element={<ViewPastQuiz />} />
+        <Route path="/viewpastsummary" element={<ViewPastSummary />} />
+        <Route path="/displayquiz" element={<DisplayQuiz />} />
+        <Route path="/displaysummary" element={<DisplaySummary />} />
       </Routes>
     </BrowserRouter>
   );

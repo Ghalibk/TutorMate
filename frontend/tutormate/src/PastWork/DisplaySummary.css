@@ -1,0 +1,46 @@
+.DisplaySummary {
+    background-color: #F3F3E0;
+    border: 3px solid #608BC1; 
+    border-radius: 12px; 
+    padding: 25px;
+    margin: 20px auto; 
+    width: 85%; 
+    height: auto;
+    max-width: 800px; 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+    color: #133E87; 
+    font-family: 'Arial', sans-serif; 
+    overflow-y: auto;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #133E87; 
+    margin-bottom: 20px;
+    text-align: center; 
+    text-decoration: underline; 
+}
+
+.Summary {
+    font-size: 18px;
+    line-height: 1.8; 
+    color: #333; 
+    text-align: justify; 
+    word-wrap: break-word; 
+}
+
+@media (max-width: 768px) {
+    .DisplayQuiz {
+        padding: 15px;
+        width: 90%;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .Quiz {
+        font-size: 14px; 
+    }
+}
