@@ -5,8 +5,8 @@ function Services(props){
     const navigate = useNavigate();
 
   const handleNavigate = (path) => {
-    navigate(path);
-  };
+    window.location.href = path;
+};
     return(
         <div className="Services">
             <div className="Quizzes">
