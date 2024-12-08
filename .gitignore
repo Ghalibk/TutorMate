@@ -18,6 +18,8 @@ frontend/tutormate/dist/
 .env
 tokens.py
 downloads/
+modules/
+todo/
 
 # Python version file
 .python-version

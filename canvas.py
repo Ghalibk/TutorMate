@@ -1,7 +1,6 @@
 import requests
 import os
 import re
-import tokens
 
 class CanvasConnexion:
     
@@ -12,17 +11,67 @@ class CanvasConnexion:
             "Authorization": f"Bearer {api_token}"
         }
 
+    def is_token_valid(self):
+            url = f"{CanvasConnexion.canvas_base_url}/api/v1/users/self"
+            try:
+                response = requests.get(url, headers=self.headers)
+                return response.status_code == 200
+            except requests.RequestException as e:
+                print(f"Error validating token: {e}")
+                return False
 
     def getCourses(self):
         url = f"{CanvasConnexion.canvas_base_url}/api/v1/courses"
         params = {
             "enrollment_type": "student",
             "enrollment_state": "active",
-            "include": ["term"]
         }
         response = requests.get(url, headers=self.headers, params=params)
-        return response.json() if response.status_code == 200 else None
+        
+        if response.status_code == 200:
+            courses = response.json()
+            course_data = []
+
+            for course in courses:
+                course_id = course.get('id')
+                image_url = self.get_course_image(course_id)  # Fetch course image
+                term_name = self.get_course_term(course_id)  # Fetch course term
+
+                course_data.append({
+                    "id": course_id,
+                    "name": course.get('name', 'Unknown'),
+                    "course_code": course.get('course_code', 'No code'),
+                    "term_name": term_name,
+                    "image_url": image_url,
+                })
+            return course_data
+        else:
+            print(f"Failed to fetch courses, status code: {response.status_code}")
+            return None
+
+    def get_course_image(self, course_id):
+        url = f"{CanvasConnexion.canvas_base_url}/api/v1/courses/{course_id}"
+        params = {
+            "include": "course_image",  # Include only the course image
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        if response.status_code == 200:
+            course = response.json()
+            return course.get("image_download_url", 'No image')
+        return None
     
+
+    def get_course_term(self, course_id):
+        url = f"{CanvasConnexion.canvas_base_url}/api/v1/courses/{course_id}"
+        params = {
+            "include": "term",  # Include only the term information
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        if response.status_code == 200:
+            course = response.json()
+            return course.get("term", {}).get("name", "No term")
+        return None
+            
     
     def getCourseAssignments(self, course_id):
         url = f"{CanvasConnexion.canvas_base_url}/api/v1/courses/{course_id}/assignments"
@@ -78,16 +127,15 @@ class CanvasConnexion:
         if response.status_code == 200:
             try:
                 todo_items = response.json()
-                print(todo_items)
             except ValueError:
                 return None
-            
             if todo_items and isinstance(todo_items, list):
                 parsed_items = []
                 for item in todo_items:
                     assignment = item.get("assignment", {})
                     parsed_items.append({
-                        "course": item.get("context_name", "Unknown Course"),
+                        "todo_id": item.get("assignment").get("id"),
+                        "course_id": item.get("course_id"),
                         "assignment_name": assignment.get("name", "Unnamed Assignment"),
                         "description": assignment.get("description", "No description"),
                         "due_date": assignment.get("due_at", "No Due Date"),
@@ -127,49 +175,41 @@ class CanvasConnexion:
             print(f"Failed to retrieve modules for course {course_id}: {response.status_code}")
             return None
 
-    
-    def downloadModuleFiles(self, course_id, download_path):
-        modules = self.getCourseModules(course_id)
 
-        if not modules:
-            print(f"No modules found for course {course_id}.")
-            return
+
+
+    def downloadModuleFiles(self, download_url, file_name, download_path):
+        # Construct the full file path
+        file_path = os.path.join(download_path, file_name)
         
-        os.makedirs(download_path, exist_ok=True)
-        
-        for module in modules:
-            module_name = module.get("name", "Unnamed Module")
-            print(f"Processing module: {module_name}")
+        # Check if the file already exists
+        if os.path.exists(file_path):
+            # Get the size of the existing file
+            existing_file_size = os.path.getsize(file_path)
+            # Make an actual GET request to download the file
+            file_response = requests.get(download_url, headers=self.headers, stream=True)
 
-            for item in module.get("items", []):
-                if item.get("type") == "File":
-                    metadata_url = item.get("url") 
-                    file_name = self.sanitize_file_name(item.get("title", "Unnamed File"))
+            if file_response.status_code == 200:
+                # Get the remote file size by reading the content
+                remote_file_size = len(file_response.content)
+                # If the sizes are the same, skip the download
+                if existing_file_size == remote_file_size:
+                    return
+            else:
+                return
+        try:
+            # Now, fetch the file and save it
+            file_response = requests.get(download_url, headers=self.headers, stream=True)
+            if file_response.status_code == 200:
+                # Ensure the target directory exists
+                os.makedirs(download_path, exist_ok=True)
 
-                    if metadata_url:
-                        print(f"Fetching metadata for file: {file_name}")
-                        metadata_response = requests.get(metadata_url, headers=self.headers)
-
-                        if metadata_response.status_code == 200:
-                            metadata = metadata_response.json()
-                            download_url = metadata.get("url")
-                            print(f"Downloading file from: {download_url}")
-
-                            file_response = requests.get(download_url, headers=self.headers, stream=True)
-                            
-                            if file_response.status_code == 200:
-                                file_path = os.path.join(download_path, file_name)
-                                try:
-                                    with open(file_path, "wb") as f:
-                                        for chunk in file_response.iter_content(chunk_size=8192):
-                                            f.write(chunk)
-                                    print(f"File saved: {file_path}")
-                                except Exception as e:
-                                    print(f"Failed to save file {file_name}: {e}")
-                            else:
-                                print(f"Failed to download {file_name}: {file_response.status_code}")
-                        else:
-                            print(f"Failed to fetch metadata for {file_name}: {metadata_response.status_code}")
+                # Write the file content
+                with open(file_path, "wb") as f:
+                    for chunk in file_response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+        except Exception as e:
+            e
 
 
 
@@ -180,11 +220,14 @@ class CanvasConnexion:
 
 
 
+
+
+'''
 canvas = CanvasConnexion(tokens.ghali_token)
 
 todo_assignments = canvas.getToDoAssignments()
 
-'''if todo_assignments is not None:
+if todo_assignments is not None:
     if todo_assignments:
         for assignment in todo_assignments:
             print(f"Course: {assignment['course']}")
@@ -196,9 +239,10 @@ todo_assignments = canvas.getToDoAssignments()
     else:
         print("No To-Do assignments available.")
 else:
-    print("An error occurred while fetching To-Do assignments.")'''
+    print("An error occurred while fetching To-Do assignments.")
 
 for course in canvas.getCourses():
     path = f"./downloads/{course['id']}"
     print(f"Course Name: {course['name']}, ID: {course['id']}")
     canvas.downloadModuleFiles(course['id'], path)
+'''

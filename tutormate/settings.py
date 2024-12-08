@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_auth_adfs',
     'frontend.apps.FrontendConfig',
     'django_extensions',
+    'tutormate',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +84,12 @@ WSGI_APPLICATION = 'tutormate.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),      
+        'PASSWORD': os.getenv('DB_PASSWORD'), 
+        'HOST': os.getenv('DB_HOST'), 
+        'PORT': os.getenv('DB_PORT'),             
     }
 }
 
@@ -162,3 +167,12 @@ AUTH_ADFS = {
     'TENANT_ID': TENANT_ID,
     'RELYING_PARTY_ID': CLIENT_ID,
 }
+
+# OpenAI API key (for integrating AI functionalities)
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Security settings
+
+# SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
+# CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True') == 'True'
+# SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True') == 'True'

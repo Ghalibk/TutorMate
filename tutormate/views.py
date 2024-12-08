@@ -1,17 +1,31 @@
 '''
     Views to access Microsoft Graph API for user details.
 '''
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import JsonResponse
-from django.conf import settings
-from django.shortcuts import redirect
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-import os
-import re
 
+# Django Imports
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
+# REST Framework Imports
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+# Application Imports
+from .models import Course, Enroll, UploadedFile, User
+from .sync import canvasSync
+from .utils import process_file_content, summarize_course, generate_quiz  # Utility functions
+
+# External Imports
+import json
+import os
 import requests
+from canvas import *
 
 def get_graph_token():
     '''Get token from Microsoft AAD URL.'''
@@ -84,23 +98,13 @@ def get_user_info(request):
     name = ""
     email = ""
     if request.user.is_authenticated:
-        graph_token = get_graph_token()
-        if graph_token:
-            user_url = f"https://graph.microsoft.com/v1.0/users/{request.user.username}"
-            headers = {
-                "Authorization": f"Bearer {graph_token['access_token']}",
-                "Content-Type": "application/json",
-            }
-            user_response = requests.get(url=user_url, headers=headers).json()
-            match = re.search(r"<\s*(\d+)\s*>", user_response['displayName'])
-            if match:
-                id = match.group(1)
-            name = user_response['givenName'] + ' ' + user_response['surname']
-            mail = user_response['mail']
+        id = request.session["id"]
+        name = request.session["first_name"] + ' ' + request.session["last_name"]
+        email = request.session["email"]
     data = {
         'id': id,
         'name': name,
-        'email': mail,
+        'email': email,
     }
     return JsonResponse(data)
 
@@ -111,16 +115,139 @@ def login(request):
 
 @api_view(['GET'])
 def fetch_courses(request):
-    data = {
-        'courseID': 'CSC 3351 02',
-        'courseName': 'Operating Systems',
-        'courseSem': 'FA 24',
-    }
-    return Response(data)
+    # Ensure user is authenticated
+    if not request.user.is_authenticated:
+        return Response({"status": "error", "message": "User is not authenticated"}, status=401)
 
+    try:
+        # Get user info from the session
+        user = User.objects.get(user_id=request.session["id"])
+
+        # Fetch courses from the database
+        courses = Course.objects.all()  # You can add any filters if necessary
+        course_data = []
+
+        for course in courses:
+            # Fetch the enrollment data for the user and course using user_id and course_id
+            enrollment = Enroll.objects.filter(user=user, course=course).first()
+
+            if enrollment:
+                course_details = {
+                    "id": course.course_id,
+                    "name": course.name,
+                    "term_name": course.term_name,
+                    "image_url": course.image_url,
+                    "overall_grade": enrollment.letter_grade,
+                }
+                course_data.append(course_details)
+
+        if course_data:
+            print(course_data)
+            return Response(course_data)
+        else:
+            return Response({"status": "error", "message": "No courses found."}, status=404)
+
+    except:
+        return Response({"status": "error", "message": "User not found in the database."}, status=404)
+
+def check_canvas_token(request):
+    if request.user.is_authenticated:
+        try:
+            # Fetch the User object for the logged-in user
+            user = User.objects.get(user_id=request.session["id"])
+
+            # Check if canvas_token is null or initialized
+            token_status = "initialized" if user.canvas_token else "null"
+            if(token_status == "initialized"):
+                if(not CanvasConnexion(user.canvas_token).is_token_valid()):
+                    token_status = "not valid"
+            response = {
+                "status": "success",
+                "token_status": token_status,
+            }
+        except User.DoesNotExist:
+            # Handle case where the User does not exist in the database
+            response = {
+                "status": "error",
+                "message": "User not found in the database."
+            }
+
+    return JsonResponse(response)
+
+def validate_canvas_token(request):
+    if request.method == "POST":
+        try:
+            # Parse the token from the request body
+            data = json.loads(request.body)
+            canvas_token = data.get("token")
+
+            if not canvas_token:
+                return JsonResponse({"status": "error", "message": "Token is required."}, status=400)
+
+            # Validate the token using CanvasConnexion
+            is_valid = CanvasConnexion(canvas_token).is_token_valid()
+
+            if is_valid:
+                # Update the user's canvas_token in the database
+                if request.user.is_authenticated:
+                    try:
+                        user = User.objects.get(user_id=request.session["id"])
+                        user.canvas_token = canvas_token
+                        user.save()
+                        canvasSync(request.session["id"])
+                        return JsonResponse({"status": "success", "message": "Token is valid."})
+                    except User.DoesNotExist:
+                        return JsonResponse({"status": "error", "message": "User not found in the database."}, status=404)
+                else:
+                    return JsonResponse({"status": "error", "message": "User is not authenticated."}, status=401)
+            else:
+                return JsonResponse({"status": "error", "message": "Token is not valid."}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON format."}, status=400)
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
 
 def react_view(request, path=None):
     # Serve the React app's index.html for all frontend routes
     index_path = os.path.join(settings.BASE_DIR, 'frontend/tutormate/dist', 'index.html')
     with open(index_path, 'r') as f:
         return HttpResponse(f.read(), content_type='text/html')
+
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST':
+        if 'file' not in request.FILES:
+            return JsonResponse({'status': 'error', 'message': 'No file uploaded.'}, status=400)
+
+        file = request.FILES['file']
+        file_extension = os.path.splitext(file.name)[1].lower()
+
+        if file_extension not in ['.pptx', '.pdf', '.docx']:
+            return JsonResponse({'status': 'error', 'message': 'Invalid file type.'}, status=400)
+
+        # Save file temporarily
+        temp_file_path = default_storage.save(f'temp/{file.name}', ContentFile(file.read()))
+        full_temp_path = default_storage.path(temp_file_path)
+
+        try:
+            # Extract text from the file
+            extracted_text = extract_text_from_file(full_temp_path, file_extension)
+
+            # Generate quiz from the extracted content
+            quiz = generate_quiz(extracted_text)  # Using generate_quiz from util.py
+
+            # Return the extracted text and the generated quiz in the response
+            return JsonResponse({
+                'status': 'success', 
+                'text': extracted_text, 
+                'quiz': quiz
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        finally:
+            # Clean up temporary file
+            if os.path.exists(full_temp_path):
+                os.remove(full_temp_path)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)

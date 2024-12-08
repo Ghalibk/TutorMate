@@ -8,11 +8,11 @@ function Courses(props){
     window.location.href = path;
   };
     return(
-        <div className="Courses" onClick={() => handleNavigate("/servicespage")}>
+        <div className="Courses" onClick={() => handleNavigate("/servicespage?courseid=" + props.CourseID)}>
             <img src={props.CoursePic} alt="" className="Course-image" />
-            <h3 className="Course-code">Course ID: {props.CourseID}</h3>
-            <h3 className="Course-name">Course name: {props.CourseName}</h3>
+            <h3 className="Course-name">Course Name: {props.CourseName}</h3>
             <h3 className="Course-semester">Semester: {props.CourseSemester}</h3>
+            <h3 className="Course-semester">Grade: {props.OverallGrade}</h3>
         </div>
     )
 
