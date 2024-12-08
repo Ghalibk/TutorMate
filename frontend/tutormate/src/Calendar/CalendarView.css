@@ -1,173 +1,169 @@
 /* Calendar container */
 .rbc-calendar {
-    background-color: transparent !important; /* Transparent background for the calendar */
-    color:black !important;
-    font-family: Arial, sans-serif;
-    border: none;
+    background-color: #fefefe !important; /* Pure white for a clean look */
+    font-family: 'Poppins', Arial, sans-serif; /* Clean and modern font */
+    color: #2d3748 !important; /* Neutral dark text */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border: 1px solid #e2e8f0; /* Subtle border for structure */
+    width: 100%; /* Full width for responsiveness */
+    overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
-/* Header (Month, Week, Day view) */
-.rbc-header {
-    background-color: #333 !important;  /* Dark background for header */
-    color: white !important;
-    text-align: center;
+/* Toolbar container */
+.rbc-toolbar {
+    display: flex;
+    justify-content: space-between; /* Distribute elements evenly */
+    align-items: center; /* Align items vertically */
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 20px; /* Add spacing below toolbar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    gap: 10px; /* Add space between items when wrapping */
+}
+
+/* Toolbar label (month and year) */
+.rbc-toolbar-label {
+    font-size: 18px;
     font-weight: bold;
+    color: #2d3748;
+    flex-grow: 1; /* Take up remaining space */
+    text-align: center; /* Center-align for better layout */
 }
 
-/* Day cells background */
-.rbc-day-bg {
-    background-color: #608BC1 !important;  /* Dark background for each day */
+/* Navigation buttons (previous, next, today) */
+.rbc-btn-group {
+    display: flex;
+    gap: 5px; /* Space between buttons */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-/* Selected day background */
-.rbc-day-selected {
-    background-color: #2980b9 !important; /* Highlighted color for selected day */
-}
-
-/* Event background */
-.rbc-event {
-    background-color: #e74c3c !important; /* Red background for events */
-    color: white !important;  /* White text for events */
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    box-sizing: border-box;
-}
-
-/* Hover effect for events */
-.rbc-event:hover {
-    background-color: #c0392b !important; /* Darker red on hover */
-}
-
-/* Event tooltip styles */
-.rbc-event-label {
-    font-size: 12px;
-    color: white !important;
-}
-
-/* Styling for the navigation arrows */
 .rbc-btn-group button {
-    background-color: #2980b9 !important;
-    color: white !important;
+    background: linear-gradient(90deg, #64b5f6, #42a5f5) !important;
+    color: #ffffff !important;
     border: none;
     font-size: 14px;
-    padding: 5px;
-    margin: 0 5px;
-    border-radius: 4px;
-
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1 1 auto; /* Ensure buttons shrink or grow as needed */
 }
 
 .rbc-btn-group button:hover {
-    background-color: #3498db !important;
+    background: linear-gradient(90deg, #1e88e5, #1565c0) !important;
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3); /* Subtle shadow */
 }
 
-/* View buttons (Day, Week, Month) */
-.rbc-toolbar button {
-    background-color: #2980b9 !important;
-    color: white !important;
-    padding: 5px;
+/* Header (day names) */
+.rbc-header {
+    background: linear-gradient(90deg, #90caf9, #64b5f6);
+    color: #ffffff !important;
+    text-align: center;
+    font-weight: 700;
     font-size: 14px;
-    border: none;
-    border-radius: 4px;
-
-
+    text-transform: uppercase;
+    padding: 8px 0;
+    border-radius: 6px;
+    margin: 5px;
 }
 
-.rbc-toolbar button:hover {
-    background-color: #3498db !important;
+/* Day cells */
+.rbc-day-bg {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
-/* Today's date style */
-.rbc-today {
-    border: 2px solid #2980b9 !important;
-    background-color: #34495e !important;
-    color: white !important;
-}
-
-/* Style for all-day events */
-.rbc-allday-cell {
-    background-color: #2c3e50 !important;
-    color: white !important;
-}
-
-/* Hover effect for day cells */
 .rbc-day:hover {
-    background-color: #34495e !important;
+    background-color: #f1f5f9 !important;
+}
+
+.rbc-day-selected {
+    background: linear-gradient(90deg, #42a5f5, #1e88e5) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+}
+
+/* Today's date */
+.rbc-today {
+    border: 2px solid #42a5f5 !important;
+    background-color: #e3f2fd !important;
+    color: #1e88e5 !important;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+/* Event cards */
+.rbc-event {
+    background: linear-gradient(90deg, #ff8a80, #e57373) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.rbc-event:hover {
+    background: linear-gradient(90deg, #e57373, #d32f2f) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Styles */
-@media (max-width: 1200px) {
-    .rbc-calendar {
-        font-size: 14px;
-    }
-    
-    .rbc-header {
-        font-size: 16px;
-    }
 
-    .rbc-event {
-        font-size: 10px;
-        padding: 4px 8px;
-    }
-
-    .rbc-btn-group button {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-
-    .rbc-toolbar button {
-        font-size: 12px;
-        padding: 8px;
-    }
-}
-
+/* Medium screens */
 @media (max-width: 768px) {
     .rbc-calendar {
+        padding: 10px;
+    }
+    .rbc-toolbar-label {
+        font-size: 16px;
+    }
+    .rbc-btn-group {
+        flex-direction: column; /* Stack buttons */
+    }
+    .rbc-btn-group button {
+        width: 100%; /* Full-width buttons */
+    }
+    .rbc-header {
         font-size: 12px;
     }
-    
-    .rbc-header {
-        font-size: 14px;
-    }
-
     .rbc-event {
-        font-size: 8px;
-        padding: 3px 6px;
-    }
-
-    .rbc-btn-group button {
         font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    .rbc-toolbar button {
-        font-size: 10px;
-        padding: 6px;
+        padding: 4px 6px;
     }
 }
 
+/* Small screens */
 @media (max-width: 480px) {
-    .rbc-calendar {
-        font-size: 10px;
+    .rbc-toolbar {
+        flex-direction: column; /* Stack toolbar elements */
     }
-    
-    .rbc-header {
+    .rbc-toolbar-label {
+        margin-bottom: 10px; /* Add space between label and buttons */
+    }
+    .rbc-calendar {
         font-size: 12px;
     }
-
+    .rbc-header {
+        font-size: 10px;
+    }
     .rbc-event {
         font-size: 8px;
-        padding: 2px 4px;
+        padding: 3px;
     }
-
     .rbc-btn-group button {
-        font-size: 8px;
-        padding: 2px 4px;
-    }
-
-    .rbc-toolbar button {
-        font-size: 8px;
-        padding: 4px;
+        font-size: 12px;
+        padding: 6px 8px;
     }
 }
