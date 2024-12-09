@@ -20,6 +20,8 @@ tokens.py
 downloads/
 modules/
 todo/
+activate.bat
+myenv/
 
 # Python version file
 .python-version

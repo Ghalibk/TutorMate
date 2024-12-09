@@ -1,70 +1,98 @@
 .sidebar {
-    width: 200px;
-    background-color: #133E87; 
-    color: #F3F3E0; 
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .sidebar h2 {
-    font-size: 30px;
-    font-family: tahoma, sans-serif;
-    margin-bottom: 15px;
-    color: #F3F3E0;
-    cursor: pointer;
-    text-align: center;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-  }
-  
-  .sidebar li {
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #133E87; 
-    color: #F3F3E0;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar li:hover {
-    background-color: #608BC1; 
-  }
+  width: 240px; /* Slightly wider for modern appearance */
+  background: linear-gradient(145deg, #133e87, #1a4caa); /* Gradient background */
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Consistent spacing */
+  border-radius: 15px; /* Rounded corners for a modern look */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: relative;
+}
 
-  .sidebar .logout {
-   
-    border-radius: 5px;
-    background-color: #F3F3E0; 
-    color: #133E87; 
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    position: absolute; 
-    bottom: 0; 
-    left: 0; 
-    z-index: 10;
-    margin: 10px;
-    width: 196px;
+.sidebar h2 {
+  font-size: 26px;
+  font-family: 'Roboto', sans-serif; /* Clean, modern font */
+  margin-bottom: 15px;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid white; /* Underline effect */
+  padding-bottom: 10px;
+}
 
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Allows the list to grow to fill space */
+}
+
+.sidebar li {
+  padding: 12px 15px; /* Balanced padding */
+  border-radius: 10px; /* Rounded corners for modern design */
+  cursor: pointer;
+ 
+  color: white;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center; /* Center-align text for uniformity */
+}
+
+.sidebar li:hover {
+  background: #608BC1;
+  transform: translateX(5px); /* Subtle slide effect */
+}
+
+.sidebar .logout {
+  border-radius: 10px;
+  background-color: white;
+  color: #133E87;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: absolute;
+  bottom: 20px;
+  left: 20px; /* Align with sidebar padding */
+  right: 20px; /* Ensures the button fits perfectly */
+  margin: 0;
+  padding: 12px; /* Comfortable padding */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
 }
 
 .sidebar .logout:hover {
-    background-color: #CBDCEB;
+  background-color: #CBDCEB;
+  transform: translateY(-3px); /* Subtle lift effect */
 }
 
-  @media (min-width: 768px) {
-    .sidebar {
-        width: 200px; 
-    }
+@media (min-width: 768px) {
+  .sidebar {
+    width: 240px;
+  }
 }
+
 @media (max-width: 480px) {
-    .sidebar{
-      width: 50px;
-    }
+  .sidebar {
+    width: 200px; /* Compact width for smaller screens */
+    padding: 15px; /* Adjust padding */
+  }
+
+  .sidebar h2 {
+    font-size: 20px;
+  }
+
+  .sidebar li {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .sidebar .logout {
+    padding: 10px; /* Adjust padding for smaller screens */
+    bottom: 15px; /* Adjust position */
+    left: 15px;
+    right: 15px; /* Ensure it fits within smaller sidebar */
+  }
 }
