@@ -1,8 +1,8 @@
 
   
   .Courses {
-    background-color: #F3F3E0; /* Light cream background */
-    border: 2px solid #133E87; /* Deep blue border */
+    background-color: white; /* Light cream background */
+    border: 2px solid  white; /* Deep blue border */
     border-radius: 10px;
     width: 300px;
     padding: 20px;
@@ -13,6 +13,7 @@
     flex-shrink: 0; /* Ensures cards don’t shrink when overflowing */
     display: inline-block;
     margin: 10px;
+    position: relative; /* Required for the grade circle positioning */
   }
   
   .Courses:hover {
@@ -26,14 +27,45 @@
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 15px;
-    border: 2px solid #CBDCEB; /* Light blue border around the image */
+    border: 2px solid white; /* Light blue border around the image */
+  }
+
+  .grade-circle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 120px;
+    height: 40px;
+   
+    background-color: #164a89; /* Deep blue for the grade circle */
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
+  .grade-circle:hover {
+    background-color: #164a89; /* Medium blue on hover */
+  }
+
+.Course-details {
+  text-align: left; /* Align course details to the left */
+}
+  
+  .Course-code,
   .Course-name,
   .Course-semester {
-    color: #133E87; /* Deep blue text */
+    color: black; /* Changed text color to black */
     font-family: 'Arial', sans-serif;
     margin: 10px 0;
+  }
+  
+  .Course-code {
+    font-size: 18px;
+    font-weight: bold;
   }
   
   .Course-name {
@@ -55,9 +87,18 @@
     .Course-image {
         height: 120px; /* Adjust image size for smaller screens */
     }
+    .grade-circle {
+      width: 35px; /* Smaller grade circle for smaller screens */
+      height: 35px;
+      font-size: 12px;
+    }
 }
 
 @media (max-width: 480px) {
+    .Course-code {
+        font-size: 16px;
+    }
+
     .Course-name {
         font-size: 14px;
     }

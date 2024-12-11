@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from . import views
-from .views import SummarizeCourseView, upload_file
+#from .views import SummarizeCourseView, upload_file
 
 urlpatterns = [
     path('login/', views.login, name='login'),  # Login route handled by Django
@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/profile/', views.get_user_info, name='user-info'),
     path('api/user-photo/', views.get_user_photo, name='user-photo'),
     path('oauth2/', include('django_auth_adfs.urls')),
-    path('upload-file/', upload_file, name='upload_file'), # pptx, pdf, word
-    path('summarize-course/', SummarizeCourseView.as_view(), name='summarize-course'), # Add the SummarizeCourseView URL
+    #path('upload-file/', upload_file, name='upload_file'), # pptx, pdf, word
+    #path('summarize-course/', SummarizeCourseView.as_view(), name='summarize-course'), # Add the SummarizeCourseView URL
     path('', include('frontend.urls')),  # React frontend routes
 ]

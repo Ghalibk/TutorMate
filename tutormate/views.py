@@ -17,9 +17,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Application Imports
-from .models import Course, Enroll, UploadedFile, User
+from .models import Course, Enroll, User
 from .sync import canvasSync
-from .utils import process_file_content, summarize_course, generate_quiz  # Utility functions
+from .utils import generate_quiz  # Utility functions
 
 # External Imports
 import json
@@ -213,7 +213,7 @@ def react_view(request, path=None):
     index_path = os.path.join(settings.BASE_DIR, 'frontend/tutormate/dist', 'index.html')
     with open(index_path, 'r') as f:
         return HttpResponse(f.read(), content_type='text/html')
-
+'''
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
@@ -251,3 +251,4 @@ def upload_file(request):
                 os.remove(full_temp_path)
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+        '''

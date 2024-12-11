@@ -1,69 +1,172 @@
-/* Services.css */
+/* Button styling */
+.Services .btn-generate {
+  display: inline-block;
+  padding: 8px 16px; /* Adjust padding for better look */
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  background-color: #cbebfb;
+  color: #133e87 !important;
+}
 
+.btn-generate:hover {
+  background: #133e87 !important;
+  color: #cbebfb !important;
+}
+
+/* Page container */
+.PageContainer {
+  padding: 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the entire content */
+  gap: 20px;
+}
+
+/* Top container */
+.TopContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #cdeeff;
+  padding: 20px;
+  width: 100%;
+  max-width: 900px; /* Set consistent width with the cards */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.TopText {
+  font-size: 18px;
+  color: #133e87 !important;
+  margin-right: 20px;
+
+}
+
+.TopImage {
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Services container */
 .Services {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .Services > div {
-    flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px; /* Align width with the TopContainer */
+}
+
+/* Individual service card */
+.Service {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #cbebfb;
+  padding: 20px;
+  flex: 1;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Service:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.ServiceImage {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.ServiceText {
+  font-size: 16px;
+  color: #133e87;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .TopContainer {
+    flex-direction: column;
     text-align: center;
-    background-color: #F3F3E0; /* Light cream for the cards */
+    padding: 20px;
+  }
+
+  .TopText {
+    margin: 0 0 10px 0;
+  }
+
+  .Services {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .Service {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .TopContainer {
     padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  
-  .Services > div:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+  .TopText {
+    font-size: 14px;
   }
-  
-  .Services img {
+
+  .Services {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .Service {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .ServiceText {
+    font-size: 14px;
+  }
+
+  .ServiceImage {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 1200px) {
+  .TopContainer {
+    max-width: 1100px;
+    padding: 30px;
+  }
+
+  .TopText {
+    font-size: 20px;
+  }
+
+  .Services {
+    gap: 40px;
+  }
+
+  .Service {
+    padding: 30px;
+    font-size: 18px;
+  }
+
+  .ServiceImage {
     width: 80px;
     height: 80px;
-    margin-bottom: 10px;
-    border-radius: 50%;
-    background-color: #608BC1; /* Placeholder for images */
   }
-  
-  .Services h3 {
-    font-size: 18px;
-    color: #133E87; /* Deep blue for headings */
-    margin: 10px 0;
-  }
-  
-  .Services p {
-    font-size: 14px;
-    color: #133E87;
-    margin: 10px 0;
-  }
-  
-  .Services button {
-    padding: 10px 20px;
-    background-color: #608BC1; /* Lighter blue for buttons */
-    color: #F3F3E0; /* Light cream for text */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .Services button:hover {
-    background-color: #133E87; /* Deep blue on hover */
-  }
-  
-  @media (max-width: 768px) {
-    .Services {
-      flex-direction: column;
-      gap: 15px;
-    }
-  }
-  
+}

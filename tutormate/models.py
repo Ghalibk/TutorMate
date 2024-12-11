@@ -8,7 +8,7 @@ class User(models.Model):
     canvas_token = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        db_table = "User"  # Explicitly match the existing table name in the database
+        db_table = "user"  # Explicitly match the existing table name in the database
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
