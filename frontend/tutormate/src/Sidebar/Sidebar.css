@@ -58,13 +58,30 @@
     background-color: #CBDCEB;
 }
 
-  @media (min-width: 768px) {
-    .sidebar {
-        width: 200px; 
-    }
+/* Responsive design for tablets */
+@media (min-width: 768px) {
+  .sidebar {
+      width: 200px; 
+  }
 }
+
+/* Responsive design for phones */
 @media (max-width: 480px) {
-    .sidebar{
-      width: 50px;
-    }
+  .sidebar {
+      width: 70px; /* Make sidebar narrower */
+      padding: 10px; /* Reduce padding */
+  }
+
+  .sidebar h2 {
+      font-size: 18px; /* Smaller text */
+  }
+
+  .sidebar li {
+      font-size: 12px; /* Smaller text for menu items */
+      padding: 5px; /* Less padding */
+  }
+
+  .sidebar .logout {
+      font-size: 14px; /* Adjust logout button text size */
+  }
 }
