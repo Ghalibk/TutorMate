@@ -1,46 +1,65 @@
 .DisplaySummary {
-    background-color: #F3F3E0;
-    border: 3px solid #608BC1; 
-    border-radius: 12px; 
-    padding: 25px;
+    background: #ffffff; /* White card background */
+    border: 3px solid #608BC1; /* Blue border to match the theme */
+    border-radius: 20px; /* Softer, modern rounding */
+    padding: 40px; /* Consistent padding */
     margin: 20px auto; 
-    width: 85%; 
-    height: auto;
+    width: 100%; 
     max-width: 800px; 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
-    color: #133E87; 
-    font-family: 'Arial', sans-serif; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    color: #1e293b; /* Neutral dark text */
+    font-family: 'Poppins', sans-serif; /* Modern font */
     overflow-y: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.DisplaySummary:hover {
+    transform: translateY(-5px); /* Subtle lift on hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
 }
 
 .title {
-    font-size: 26px;
-    font-weight: bold;
-    color: #133E87; 
+    font-size: 2.2rem; /* Aligning with modern typography */
+    font-weight: 700;
+    color: #1e40af; /* Deep blue for emphasis */
     margin-bottom: 20px;
-    text-align: center; 
-    text-decoration: underline; 
+    text-align: center;  
+    letter-spacing: 1px; /* Subtle spacing */
 }
 
 .Summary {
-    font-size: 18px;
+    font-size: 1.1rem; /* Readable font size */
     line-height: 1.8; 
-    color: #333; 
+    color: #64748b; /* Neutral gray for body text */
     text-align: justify; 
     word-wrap: break-word; 
 }
 
 @media (max-width: 768px) {
-    .DisplayQuiz {
-        padding: 15px;
+    .DisplaySummary {
+        padding: 30px; /* Adjust padding for smaller screens */
         width: 90%;
     }
 
     .title {
-        font-size: 20px;
+        font-size: 1.8rem; /* Adjust heading size */
     }
 
-    .Quiz {
-        font-size: 14px; 
+    .Summary {
+        font-size: 1rem; /* Adjust text size */
+    }
+}
+
+@media (max-width: 480px) {
+    .DisplaySummary {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 1.6rem; /* Smaller headings for mobile */
+    }
+
+    .Summary {
+        font-size: 0.9rem; /* Slightly smaller text */
     }
 }

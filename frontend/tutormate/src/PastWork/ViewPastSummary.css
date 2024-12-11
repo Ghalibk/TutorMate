@@ -1,57 +1,59 @@
 /* Container for the quiz item */
 .SummaryContainer {
-    background-color: #2c3e50; /* Dark background for the card */
-    color: white;
+    background: #f1f5f9; /* Deep blue background for the card */
+    
     padding: 20px;
-    margin: 15px auto;
-    border-radius: 10px;
+    margin: 150px auto;
+    border-radius: 20px; /* Softer corners */
     width: 80%; /* Make it responsive */
     max-width: 400px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
     text-align: center;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover effect for the quiz container */
 .SummaryContainer:hover {
     transform: scale(1.05);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Subtle lift effect */
 }
 
 /* Quiz ID text */
 .SummaryID {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e40af; /* White for emphasis */
     margin-bottom: 10px;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif; /* Consistent modern font */
+    letter-spacing: 1px; /* Modern typography touch */
 }
 
 /* Module description */
 .SummaryModule {
-    font-size: 16px;
+    font-size: 1rem;
     margin-bottom: 20px;
-    color: #bdc3c7; /* Slightly lighter text for secondary info */
-    font-family: Arial, sans-serif;
+    color: #1e40af; /* Light gray for secondary text */
+    font-family: 'Poppins', sans-serif; /* Consistent modern font */
 }
 
 /* View Quiz button */
 .ViewSummary {
-    background-color: #2980b9; /* Blue background for button */
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
+    background: linear-gradient(135deg, #3498db, #5dade2); /* Gradient button matching theme */
+    color: #ffffff; /* White text for contrast */
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px; /* Softer corners */
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover effect for the button */
 .ViewSummary:hover {
-    background-color: #3498db; /* Lighter blue on hover */
+    background: linear-gradient(135deg, #1d4ed8, #1e40af); /* Darker gradient on hover */
     transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Consistent hover shadow */
 }
 
 /* Responsive design for smaller screens */
