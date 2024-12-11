@@ -9,7 +9,7 @@
   .main {
     flex: 1;
     padding: 20px;
-    background-color: #F3F3E0; 
+    background-color: white; 
     box-shadow: -1px 0px 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
   }

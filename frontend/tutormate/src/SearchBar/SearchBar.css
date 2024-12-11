@@ -11,7 +11,7 @@
     border-radius: 5px;
     font-size: 16px;
     color: #133E87; /* Deep blue text */
-    background-color: #F3F3E0; /* Light cream background */
+    background-color: white; /* Light cream background */
   }
   
   .search-bar input:focus {
