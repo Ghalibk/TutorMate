@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Outlook_Icon from "../assets/outlook_icon.webp";
+import Logo from "../assets/logo.png"; 
 
 
 function LoginFormPage() {

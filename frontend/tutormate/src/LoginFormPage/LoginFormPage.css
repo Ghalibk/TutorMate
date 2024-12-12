@@ -1,18 +1,72 @@
-  .outlook-button {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    background-color: #0078d4;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-  }
-  
-  .outlook-button img {
-    margin-right: 10px;
-    width: 24px;
-    height: 24px;
-  }
-  
+/* Container styling */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6; /* Light gray background for contrast */
+  padding: 20px;
+}
+
+/* Header section */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.text {
+  font-family: 'Open Sans', Arial, sans-serif; /* Professional and clean font */
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333; /* Neutral dark color for the text */
+}
+
+.underline {
+  width: 50px;
+  height: 4px;
+  background-color: #0078d4; /* Match the button color */
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* Submit container */
+.submit-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Outlook button styling */
+.outlook-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #0078d4, #005a9e); /* Gradient for a modern look */
+  color: #ffffff;
+  font-family: 'Open Sans', Arial, sans-serif; /* Match font with the text */
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.outlook-button img {
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
+  background-color: #ffffff; /* White background for PNG images */
+  padding: 5px;
+  border-radius: 50%; /* Circle styling for icons */
+}
+
+.outlook-button:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+  background: linear-gradient(90deg, #005a9e, #004180); /* Darker gradient on hover */
+}

@@ -1,96 +1,82 @@
 /* General body styling */
 body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #133E87, #608BC1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  /* Layout for logo and form */
-  .main-layout {
-    display: flex;
-    width: 90%;
-    max-width: 1200px;
-    align-items: center;
-    justify-content: space-between; /* Align logo and form on opposite sides */
-  }
-  
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #0078d4, #0053a6); /* Match button gradient */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  z-index: 1;
+}
 
-  
-  /* Form container styling */
-  .container {
-   /* Take up right-side space */
-    background-color: white; /* White for contrast */
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Depth with shadow */
-    padding: 30px;
-    max-width: 400px; /* Restrict container width */
-    text-align: center;
-    align-self: flex-end;
-  }
-  
-  /* Header styling */
-  .header {
-    margin-bottom: 20px;
-  }
-  
-  .header .text {
-    font-size: 24px;
-    font-weight: bold;
-    color: #1a3c72;
-  }
-  
-  .header .underline {
-    width: 100px;
-    height: 4px;
-    background-color: #0078d4; /* Accent color */
-    margin: 8px auto;
-    border-radius: 2px;
-  }
-  
-  /* Buttons for Sign Up and Login */
-  .submit-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Spacing between buttons */
-    margin-top: 30px;
-  }
-  
-  .submit {
-    padding: 15px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background: linear-gradient(135deg, #0078d4, #0053a6); /* Modern gradient */
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  }
-  
-  .submit:hover {
-    background: linear-gradient(135deg, #0053a6, #0078d4); /* Gradient reversal */
-    transform: translateY(-3px); /* Lift effect */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow */
-  }
-  
-  /* Responsive layout for smaller screens */
-  @media (max-width: 768px) {
-    .main-layout {
-      flex-direction: column; /* Stack logo and form vertically */
-      align-items: center;
-    }
-  
-  
-    .container {
-      width: 90%; /* Adjust container width */
-      padding: 20px;
-    }
-  }
-  
+/* Main layout for centering logo and card */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+
+
+/* Card container styling */
+.container {
+  background-color: white; /* White card background for contrast */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Depth with shadow */
+  padding: 30px;
+  width: 100%;
+  max-width: 400px; /* Ensure consistent width */
+  text-align: center;
+}
+
+/* Header styling */
+.header {
+  margin-bottom: 20px;
+}
+
+.header .text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a3c72;
+}
+
+.header .underline {
+  width: 100px;
+  height: 4px;
+  background-color: #0078d4; /* Accent color */
+  margin: 8px auto;
+  border-radius: 2px;
+}
+
+/* Buttons for Sign Up and Login */
+.submit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between buttons */
+  margin-top: 20px;
+}
+
+.submit {
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #0078d4, #0053a6); /* Match button gradient */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.submit:hover {
+  background: linear-gradient(135deg, #0053a6, #0078d4); /* Gradient reversal */
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+}
