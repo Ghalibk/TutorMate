@@ -18,7 +18,6 @@ function Sidebar() {
         <li onClick={() => handleNavigate("/dashboard")}>Dashboard</li><hr />
         <li onClick={() => handleNavigate("/pastwork")}>Past Work</li><hr />
         <li onClick={() => handleNavigate("/calendarview")}>Calendar</li><hr />
-        <li onClick={() => handleNavigate("/settings")}>Settings</li>
         <li className="logout" onClick={() => handleNavigate("/")}>Logout</li>
       </ul>
     </div>
