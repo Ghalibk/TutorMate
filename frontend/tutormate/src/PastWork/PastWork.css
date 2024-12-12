@@ -2,9 +2,9 @@
     display: flex;
     justify-content: center; /* Center items horizontally */
     align-items: center; /* Center items vertically */
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 20px; /* Add spacing between items */
-    margin: 150px;
+    margin: 130px;
     padding: 30px;
     border-radius: 20px; /* Larger rounding for consistency */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
