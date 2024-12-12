@@ -1,20 +1,21 @@
 /* Button styling */
 .Services .btn-generate {
   display: inline-block;
-  padding: 8px 16px; /* Adjust padding for better look */
+  padding: 10px 20px; /* Adjust padding for a professional look */
   font-size: 16px;
   font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
-  background-color: #cbebfb;
-  color: #133e87 !important;
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
+  background-color: #cdeeff; /* Bold blue background */
+  color: #ffffff !important; /* White text for contrast */
 }
 
 .btn-generate:hover {
-  background: #133e87 !important;
-  color: #cbebfb !important;
+  background:#cdeeff!important; /* Darker blue hover effect */
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
 }
 
 /* Page container */
@@ -42,9 +43,9 @@
 
 .TopText {
   font-size: 18px;
-  color: #133e87 !important;
+  font-family: 'Open Sans', Arial, sans-serif; /* Updated font */
+  color: #133E87 !important;
   margin-right: 20px;
-
 }
 
 .TopImage {
@@ -68,7 +69,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #cbebfb;
+  background-color: #ffffff; /* White background for clean look */
   padding: 20px;
   flex: 1;
   border-radius: 15px;
@@ -85,6 +86,9 @@
   width: 60px;
   height: 60px;
   margin-bottom: 10px;
+  border-radius: 8px; /* Slight rounding for a polished look */
+  background-color:  #ffffff; /* Light background for PNG images */
+  padding: 10px; /* Inner padding to give space */
 }
 
 .ServiceText {
@@ -92,6 +96,7 @@
   color: #133e87;
   text-align: center;
   font-weight: bold;
+  font-family: 'Open Sans', Arial, sans-serif; /* Updated font */
 }
 
 /* Responsive styling */
@@ -142,6 +147,7 @@
   .ServiceImage {
     width: 50px;
     height: 50px;
+    padding: 8px;
   }
 }
 
@@ -168,5 +174,6 @@
   .ServiceImage {
     width: 80px;
     height: 80px;
+    padding: 12px;
   }
 }
