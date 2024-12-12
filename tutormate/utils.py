@@ -81,36 +81,41 @@ def generate_quiz(difficulty, num_questions, extracted_text):
             )
 
     return extract_code_snippet(safe_openai_call(prompt))
-'''
-def generate_todo_help(content):
+
+def generate_todo_help(assignment_name, description):
     prompt = (
-                f"Create a {difficulty} quiz with {num_questions} questions based on the "
-                f"following content with the correct answers:\n\n{extracted_text} "
+                f"Give steps to solve assigment with the following name{assignment_name}"
+                f" and the following description:\n\n{description} "
                 f"""it should be in a JSON file in a format like the following: {{
-  "quiz": {{
-    "title": "Quiz Title",
-    "questions": [
-      {{
-        "question_id": 1,
-        "question_text": "Question text goes here.",
-        "options": [
-          {{ "option_id": "a", "text": "Option A text" }},
-          {{ "option_id": "b", "text": "Option B text" }},
-          {{ "option_id": "c", "text": "Option C text" }},
-          {{ "option_id": "d", "text": "Option D text" }}
-        ],
-        "correct_option": "a",
-        "explanation": "Explanation for the correct answer goes here."
-      }}
-    ]
-  }}
+  "todo_id": 1,
+  "assignment_name": "Build a Calculator App",
+  "steps": [
+    {{
+      "step_number": 1,
+      "description": "Understand the requirements and functionalities of the calculator app."
+    }},
+    {{
+      "step_number": 2,
+      "description": "Design a user interface with buttons for numbers and operations."
+    }},
+    {{
+      "step_number": 3,
+      "description": "Write the code for handling arithmetic operations like addition, subtraction, multiplication, and division."
+    }},
+    {{
+      "step_number": 4,
+      "description": "Test the application for bugs or errors."
+    }},
+    {{
+      "step_number": 5,
+      "description": "Deploy the app and gather feedback for improvements."
+    }}
+  ]
 }}"""
                 f"\n Make Sure you generate only a JSON file and nothing else"
             )
 
     return extract_code_snippet(safe_openai_call(prompt))
-
-'''
 
 def generate_flashcard(extracted_text):
     prompt = (
@@ -162,33 +167,30 @@ def generate_bulletpoints(extracted_text):
 
     return extract_code_snippet(safe_openai_call(prompt))
 
-'''
 
 def generate_full_summary(extracted_text):
     prompt = (
-                f"Create a {difficulty} quiz with {num_questions} questions based on the "
-                f"following content with the correct answers:\n\n{extracted_text} "
-                f"""it should be in a JSON file in a format like the following: {{
-  "quiz": {{
-    "title": "Quiz Title",
-    "questions": [
+                f"Create a full detailed summary quiz "
+                f"of the following content:\n\n{extracted_text} "
+                f"""it should be in a JSON format like the following:
+{{
+  "summary": {{
+    "title": "Document Title",
+    "content": "A detailed summary of the document.",
+    "sections": [
       {{
-        "question_id": 1,
-        "question_text": "Question text goes here.",
-        "options": [
-          {{ "option_id": "a", "text": "Option A text" }},
-          {{ "option_id": "b", "text": "Option B text" }},
-          {{ "option_id": "c", "text": "Option C text" }},
-          {{ "option_id": "d", "text": "Option D text" }}
-        ],
-        "correct_option": "a",
-        "explanation": "Explanation for the correct answer goes here."
+        "section_title": "Section 1 Title",
+        "section_summary": "Brief summary of Section 1, highlighting its key points and main ideas."
+      }},
+      {{
+        "section_title": "Section 2 Title",
+        "section_summary": "Brief summary of Section 2, highlighting its key points and main ideas."
       }}
-    ]
+    ],
+    "conclusion": "A concise conclusion summarizing the entire document."
   }}
 }}"""
                 f"\n Make Sure you generate only a JSON file and nothing else in your answer and also make sure to change the order of the correct and not always put the correct answer in choice A"
             )
 
     return extract_code_snippet(safe_openai_call(prompt))
-    '''

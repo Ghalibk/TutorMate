@@ -7,10 +7,12 @@ import "./Todo.css";
 function Todo() {
   const location = useLocation();
   const [courseId, setCourseId] = useState(null);
-  const [assignmentNames, setAssignmentNames] = useState([]);
+  const [todos, setTodos] = useState([]);
+  const [steps, setSteps] = useState([]); // State to store steps for todos
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingSteps, setLoadingSteps] = useState(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -27,7 +29,7 @@ function Todo() {
         })
         .then((data) => {
           if (data.status === "success") {
-            setAssignmentNames(data.assignment_names || []);
+            setTodos(data.todos || []);
             setMessage(data.message || "");
           } else {
             setError(data.message);
@@ -45,6 +47,43 @@ function Todo() {
     }
   }, [location.search]);
 
+  const handleGenerateSteps = () => {
+    const todoIds = todos.map((todo) => todo.todo_id);
+    setLoadingSteps(true);
+
+    fetch("/api/generate-steps/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ todo_ids: todoIds }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to generate steps.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === "success") {
+          const parsedSteps = data.steps_data.map((stepData) => {
+            const steps = JSON.parse(stepData.steps).steps || [];
+            return { ...stepData, steps };
+          });
+          setSteps(parsedSteps || []);
+        } else {
+          throw new Error(data.message || "Error generating steps.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        alert("Failed to generate steps.");
+      })
+      .finally(() => {
+        setLoadingSteps(false);
+      });
+  };
+
   return (
     <div className="dashboard">
       <Sidebar />
@@ -58,18 +97,44 @@ function Todo() {
               <p className="loading">Loading...</p>
             ) : error ? (
               <p className="error">{error}</p>
-            ) : assignmentNames.length > 0 ? (
-              <ul className="assignment-list">
-                {assignmentNames.map((name, index) => (
-                  <li key={index} className="assignment-item">
-                    {name}
-                  </li>
-                ))}
-                <button className="ShowSteps">Show Steps:</button>
-              </ul>
+            ) : todos.length > 0 ? (
+              <div>
+                <ul className="assignment-list">
+                  {todos.map((todo) => (
+                    <li key={todo.todo_id} className="assignment-item">
+                      <p>{todo.assignment_name}</p>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className="ShowSteps"
+                  onClick={handleGenerateSteps}
+                  disabled={loadingSteps}
+                >
+                  {loadingSteps ? "Generating Steps..." : "Show Steps"}
+                </button>
+                {steps.length > 0 && (
+                  <div className="steps-container">
+                    <h4>Steps to Complete:</h4>
+                    {steps.map((stepData) => (
+                      <div key={stepData.todo_id} className="step-item">
+                        <h5>{stepData.assignment_name}</h5>
+                        <ul className="steps-list">
+                          {stepData.steps.map((step, index) => (
+                            <li key={index}>
+                              Step {step.step_number}: {step.description}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             ) : (
               <p className="no-items">{message || "No To-Do items found."}</p>
             )}
+            {loadingSteps && <p className="loading">Generating steps...</p>}
           </div>
         </div>
       </div>

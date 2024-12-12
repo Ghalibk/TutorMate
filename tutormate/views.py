@@ -20,7 +20,7 @@ from rest_framework.views import APIView
 # Application Imports
 from .models import Course, Enroll, User, Todo, Module#, UploadedFile
 from .sync import userDataSync
-from .utils import generate_quiz, generate_flashcard, generate_bulletpoints
+from .utils import generate_quiz, generate_flashcard, generate_bulletpoints, generate_full_summary, generate_todo_help
 
 # External Imports
 from PyPDF2 import PdfReader
@@ -260,9 +260,19 @@ def fetch_todo(request):
         return Response({"status": "error", "message": "User is not authenticated"}, status=401)
 
     try:
-        # Fetch all To-Do tasks from the database
-        todo_items = Todo.objects.all()
-        print("Fetched tasks:", todo_items)
+        # Get the user ID from the session
+        user_id = request.session.get("id")
+        if not user_id:
+            return Response({"status": "error", "message": "User ID is missing in session"}, status=400)
+
+        # Fetch the courses the user is enrolled in from the Enroll table
+        enrolled_courses = Enroll.objects.filter(user_id=user_id).values_list('course__course_id', flat=True)
+        if not enrolled_courses:
+            return Response({"status": "success", "message": "No courses found for the user", "todos": []}, status=200)
+
+        # Fetch To-Dos for the courses the user is enrolled in
+        todo_items = Todo.objects.filter(course__course_id__in=enrolled_courses)
+        print("Filtered tasks:", todo_items)
 
         # List to store the formatted tasks
         formatted_items = []
@@ -338,21 +348,25 @@ def get_todo(request):
         if not todos.exists():
             # Return a response indicating no To-Do items found
             return JsonResponse(
-                {"status": "success", "message": "No To-Do items found", "assignment_names": []},
+                {"status": "success", "message": "No To-Do items found", "todos": []},
                 status=200,
             )
 
-        # Serialize only the assignment_name
-        assignment_names = [todo.assignment_name for todo in todos]
+        # Serialize todo_id and assignment_name
+        todo_list = [{"todo_id": todo.todo_id, "assignment_name": todo.assignment_name} for todo in todos]
 
         return JsonResponse(
-            {"status": "success", "assignment_names": assignment_names},
+            {"status": "success", "todos": todo_list},
             status=200,
         )
 
     except Exception as e:
         print(f"Error fetching To-Do items: {e}")
-        return JsonResponse({"status": "error", "message": "An error occurred while fetching To-Do items"}, status=500)
+        return JsonResponse(
+            {"status": "error", "message": "An error occurred while fetching To-Do items"},
+            status=500,
+        )
+
 
 def extract_text_from_file(file_path):
     """Extract text from PDF, PPTX, or DOCX."""
@@ -585,9 +599,138 @@ def generate_bulletpoints_view(request):
             {"status": "error", "message": "Invalid request method."},
             status=405
         )
+    
+@csrf_exempt
+def generate_fullsummary_view(request):
+    if request.method == "POST":
+        try:
+            # Parse the JSON body
+            data = json.loads(request.body)
+            course_id = data.get("course_id")
+            module_name = data.get("module_name")
+            summary_type = data.get("summary_type")
 
+            # Validate input
+            if not course_id or not module_name or not summary_type:
+                return JsonResponse(
+                    {"status": "error", "message": "Course ID, module name, and summary type are required."},
+                    status=400
+                )
 
+            module_file_path = f"./modules/{course_id}/{module_name}"
+            # Ensure the module file exists
+            if not os.path.exists(module_file_path):
+                return JsonResponse(
+                    {"status": "error", "message": "Module file does not exist."},
+                    status=404
+                )
 
+            # Extract text from the module file
+            extracted_text = extract_text_from_file(module_file_path)
+            if not extracted_text:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to extract text from the module."},
+                    status=400
+                )
+
+            # Generate the full summary using AI
+            full_summary = generate_full_summary(extracted_text)
+
+            # Ensure the response is formatted correctly
+            if not full_summary:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to generate full summary."},
+                    status=500
+                )
+
+            # Return the generated full summary
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "summary": full_summary
+                },
+                status=200
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400
+            )
+        except Exception as e:
+            print(f"Error generating full summary: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+
+@csrf_exempt
+def generate_steps_for_todos_view(request):
+    if request.method == "POST":
+        try:
+            # Parse the JSON body
+            data = json.loads(request.body)
+            todo_ids = data.get("todo_ids", [])
+
+            if not todo_ids or not isinstance(todo_ids, list):
+                return JsonResponse(
+                    {"status": "error", "message": "A list of To-Do IDs is required."},
+                    status=400,
+                )
+
+            steps_responses = []
+
+            # Fetch and process each To-Do item
+            for todo_id in todo_ids:
+                try:
+                    todo = Todo.objects.get(todo_id=todo_id)
+                    file = open(f"./todo/{todo.course.course_id}/{todo_id}.txt", "r")
+
+                    # Generate steps using AI
+                    steps = generate_todo_help(todo.assignment_name, file.read())
+
+                    if not steps:
+                        steps = ["Failed to generate steps for this To-Do item."]
+
+                    steps_responses.append({
+                        "todo_id": todo_id,
+                        "assignment_name": todo.assignment_name,
+                        "steps": steps
+                    })
+
+                except Todo.DoesNotExist:
+                    steps_responses.append({
+                        "todo_id": todo_id,
+                        "error": f"To-Do item with ID {todo_id} not found."
+                    })
+
+            # Return the steps for all requested To-Do items
+            return JsonResponse(
+                {"status": "success", "steps_data": steps_responses},
+                status=200,
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400,
+            )
+        except Exception as e:
+            print(f"Error generating steps for To-Dos: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500,
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405,
+        )
 
 '''
 @csrf_exempt
