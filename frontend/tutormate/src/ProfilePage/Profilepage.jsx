@@ -28,10 +28,15 @@ function ProfilePage() {
         }
       })
       .then((blob) => {
-        setProfilePic(URL.createObjectURL(blob));
+        const imageUrl = URL.createObjectURL(blob);
+        setProfilePic(imageUrl);
+  
+        // Clean up the object URL when the component unmounts
+        return () => URL.revokeObjectURL(imageUrl);
       })
       .catch((error) => {
         console.error("Error fetching profile picture:", error);
+        setProfilePic("placeholder.jpg"); // Fallback image on error
       });
   }, []);
 
@@ -45,8 +50,9 @@ function ProfilePage() {
             name={profile.name}
             id={profile.id}
             email={profile.email}
-            semester="FA24"
+            semester="Fall 2024"
             ProfilePic={profilePic || "placeholder.jpg"}
+            key={profilePic}
           ></Profile>
         </div>
       </div>

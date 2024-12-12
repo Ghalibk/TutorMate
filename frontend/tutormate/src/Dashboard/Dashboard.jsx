@@ -34,19 +34,22 @@ function Dashboard() {
         <SearchBar />
         <div className="content">
           <h1>Welcome to the Dashboard</h1>
-          {courses.length > 0 ? (
-            courses.map((course) => (
-              <Courses
-                CourseID={course.id}
-                CourseName={course.name}
-                CourseSemester={course.term_name}
-                CoursePic={course.image_url}
-                OverallGrade={course.overall_grade}
-              />
-            ))
-          ) : (
-            <p>No courses available.</p>
-          )}
+          <div className="Courses-container">
+            {courses.length > 0 ? (
+              courses.map((course) => (
+                <Courses
+                  CourseID={course.id}
+                  CourseName={course.name}
+                  CourseSemester={course.term_name}
+                  CoursePic={course.image_url}
+                  LetterGrade={course.letter_grade}
+                  OverallGrade={course.overall_grade}
+                />
+              ))
+            ) : (
+              <p>No courses available.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

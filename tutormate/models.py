@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
@@ -6,6 +7,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
     canvas_token = models.CharField(max_length=255, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     class Meta:
         db_table = "user"  # Explicitly match the existing table name in the database

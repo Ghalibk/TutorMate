@@ -1,4 +1,5 @@
 from django.core.exceptions import AppRegistryNotReady
+import os
 try:
     import tutormate.signals
 except AppRegistryNotReady:

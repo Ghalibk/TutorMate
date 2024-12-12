@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
-    background: rgb(37, 150, 190); /* Set page background */
+    background: linear-gradient(135deg, #133E87, #608BC1);
     display: flex;
     justify-content: center;
     align-items: center;
