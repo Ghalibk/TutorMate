@@ -41,6 +41,7 @@ function Dashboard() {
                 CourseName={course.name}
                 CourseSemester={course.term_name}
                 CoursePic={course.image_url}
+                LetterGrade={course.letter_grade}
                 OverallGrade={course.overall_grade}
               />
             ))

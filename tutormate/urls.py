@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 #from .views import SummarizeCourseView, upload_file
 
 urlpatterns = [
@@ -24,6 +26,7 @@ urlpatterns = [
     path('api/fetch-courses/', views.fetch_courses, name='dashboard-stats'),
     path('api/check-canvas-token/', views.check_canvas_token, name='check_canvas_token'),
     path('api/validate-canvas-token/', views.validate_canvas_token, name='validate_canvas_token'),
+    path('api/todo/', views.fetch_todo, name='fetch_todo'),
     path('api/profile/', views.get_user_info, name='user-info'),
     path('api/user-photo/', views.get_user_photo, name='user-photo'),
     path('oauth2/', include('django_auth_adfs.urls')),
@@ -31,3 +34,8 @@ urlpatterns = [
     #path('summarize-course/', SummarizeCourseView.as_view(), name='summarize-course'), # Add the SummarizeCourseView URL
     path('', include('frontend.urls')),  # React frontend routes
 ]
+
+
+# Serve media files during development
+if settings.DEBUG:  # Only add this in development mode
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

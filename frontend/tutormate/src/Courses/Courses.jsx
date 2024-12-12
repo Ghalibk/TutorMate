@@ -10,9 +10,9 @@ function Courses(props){
     return(
         <div className="Courses" onClick={() => handleNavigate("/servicespage?courseid=" + props.CourseID)}>
             <img src={props.CoursePic} alt="" className="Course-image" />
-            <div className="grade-circle">Grade: {props.OverallGrade}</div>
+            <div className="grade-circle"><p>{props.LetterGrade}</p><p>{props.OverallGrade}%</p></div>
             <div className="Course-details">
-            <h3 className="Course-name">Course Name: {props.CourseName}</h3>
+            <h3 className="Course-name">{props.CourseName}</h3>
             <h3 className="Course-semester">Semester: {props.CourseSemester}</h3>
         </div>
         </div>
