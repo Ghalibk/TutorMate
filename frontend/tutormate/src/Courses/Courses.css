@@ -4,16 +4,20 @@
     background-color: white; /* Light cream background */
     border: 2px solid  white; /* Deep blue border */
     border-radius: 10px;
-    width: 300px;
+    width: 290px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     flex-shrink: 0; /* Ensures cards don’t shrink when overflowing */
-    display: inline-block;
+    /*display: inline-block;*/
     margin: 10px;
     position: relative; /* Required for the grade circle positioning */
+    min-height: 250px; /* Ensure consistent height */
+    width: calc(33.33% - 20px); /* 3 cards per row with spacing */
+    max-width: 290px; /* Prevent cards from being too large */
+    flex-grow: 1; 
   }
   
   .Courses:hover {
@@ -30,13 +34,23 @@
     border: 2px solid white; /* Light blue border around the image */
   }
 
+  .Course-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px; /* Match the image border radius */
+    background-color: rgba(255, 255, 255, 0.5); /* Default transparent color */
+    pointer-events: none; /* Allow clicks to pass through */
+  }
+
   .grade-circle {
     position: absolute;
     top: 10px;
     right: 10px;
     width: 120px;
     height: 40px;
-   
     background-color: #164a89; /* Deep blue for the grade circle */
     color: white;
     font-weight: bold;
@@ -45,8 +59,6 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column; /* Stack the paragraphs vertically */
   }
   
   .grade-circle:hover {

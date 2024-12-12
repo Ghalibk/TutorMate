@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Application Imports
-from .models import Course, Enroll, User, Todo#, UploadedFile
+from .models import Course, Enroll, User, Todo, Module#, UploadedFile
 from .sync import userDataSync
 from .utils import generate_quiz  # Utility functions
 
@@ -298,6 +298,31 @@ def fetch_todo(request):
     except Exception as e:
         print(f"Error: {e}")
         return Response({"status": "error", "message": str(e)}, status=500)
+    
+def get_course_name(request):
+    course_id = request.GET.get("courseid")
+    if not course_id:
+        return JsonResponse({"error": "Course ID is required"}, status=400)
+
+    try:
+        # Query the database for the course
+        course = Course.objects.get(course_id=course_id)
+        return JsonResponse({"name": course.name})
+    except Course.DoesNotExist:
+        return JsonResponse({"error": "Course not found"}, status=404)
+    
+def get_modules(request):
+    course_id = request.GET.get("courseid")
+    if not course_id:
+        return JsonResponse({"error": "Course ID is required"}, status=400)
+
+    # Query the database for modules linked to the specified course
+    modules = Module.objects.filter(course_id=course_id).values("id", "file_name")
+    
+    if not modules.exists():
+        return JsonResponse({"modules": []}, status=404)  # No modules found
+
+    return JsonResponse({"modules": list(modules)}, status=200)
 
 '''
 @csrf_exempt
