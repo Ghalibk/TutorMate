@@ -164,6 +164,104 @@
     }
     .rbc-btn-group button {
         font-size: 12px;
-        padding: 6px 8px;
+        padding: 6px 8px;
+    }}
+    /* Popup container */
+    .popup {
+        position: fixed; /* Fixed positioning to stay centered on the screen */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Translate to center the popup */
+        z-index: 1000; /* High z-index to appear above other elements */
+        background-color: #fefefe; /* Pure white for a clean look */
+        border-radius: 10px; /* Rounded corners for a soft appearance */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        border: 1px solid #e2e8f0; /* Subtle border for structure */
+        max-width: 450px; /* Limit the width for better readability */
+        width: 90%; /* Make it responsive by using a percentage */
+        padding: 20px; /* Space inside the popup */
+        font-family: 'Poppins', Arial, sans-serif; /* Clean and modern font */
+        color: #2d3748; /* Neutral dark text for readability */
+        text-align: center; /* Center-align content for simplicity */
+    }
+    
+
+/* Title */
+.popup-content h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px;
+}
+
+/* Description and details */
+.popup-content p {
+    font-size: 14px;
+    color:black; /* Subtle gray for secondary text */
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* Links */
+.popup-content a {
+    color: #42a5f5; /* Professional blue link */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.popup-content a:hover {
+    color: #1e88e5; /* Darker blue hover effect */
+}
+
+/* Close button */
+.popup-content button {
+    margin-top: 15px;
+    background: linear-gradient(90deg, #ff8a80, #e57373) ; /* Gradient consistent with calendar */
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-content button:hover {
+    background: linear-gradient(90deg, #ff8a80, #e57373) !important; /* Slightly darker hover gradient */
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3); /* Subtle shadow */
+}
+
+/* Background overlay */
+.popup:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white; /* Subtle dark overlay */
+    z-index: -1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .popup {
+        padding: 15px;
+    }
+
+    .popup-content h2 {
+        font-size: 20px;
+    }
+
+    .popup-content p {
+        font-size: 13px;
+    }
+
+    .popup-content button {
+        font-size: 13px;
+        padding: 8px 16px;
     }
 }

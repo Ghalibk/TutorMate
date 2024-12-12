@@ -88,7 +88,7 @@ function CalendarView() {
             <h2>{selectedEvent.title}</h2>
             <p><strong>Due Date:</strong> {selectedEvent.start.toString()}</p>
             <p><strong>Description:</strong> {selectedEvent.description}</p>
-            <p><strong>Assignment URL:</strong> <a href={selectedEvent.assignment_url} target="_blank" rel="noopener noreferrer">View Assignment</a></p>
+            <p><strong>Go to assignment:</strong> <a href={selectedEvent.assignment_url} target="_blank" rel="noopener noreferrer">View Assignment</a></p>
             <button onClick={closePopup}>Close</button>
           </div>
         </div>
