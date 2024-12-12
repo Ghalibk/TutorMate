@@ -7,6 +7,7 @@ function ModuleChoice() {
     const location = useLocation(); 
     const [modules, setModules] = useState([]); 
     const [courseId, setCourseId] = useState(null);
+    const [selectedModule, setSelectedModule] = useState("");
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -36,28 +37,43 @@ function ModuleChoice() {
         window.location.href = path;
     }
     return (
-        <div className="dashboard">
-            <Sidebar />
-            <div className="main">
-                <SearchBar />
-                <div className="content">
-                    <div className="Module">
-                        <h3 className="title">Choose the modules you want to Summarise:</h3>
-                        <div className="CheckBoxes">
-                            <div className="CheckBoxes">
-                                {modules.map((mod) => (
-                                <label>
-                                    <input type="checkbox" name="{mod.file_name}" /> {mod.file_name}
-                                </label>
-                                ))}
-                            </div>
-
-                        </div>
-                        <button className="Next" onClick={() => handleNavigate("/summaryopt")}>Next</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
+      <div className="dashboard">
+          <Sidebar />
+          <div className="main">
+              <SearchBar />
+              <div className="content">
+                  <div className="Module">
+                      <h3 className="title">Choose the module you want to Summarize:</h3>
+                      <div className="ModuleSelect">
+                          <select
+                              value={selectedModule} // state to keep track of the selected module
+                              onChange={(e) => setSelectedModule(e.target.value)} // update state on selection
+                              className="input-select"
+                          >
+                              <option value="">Choose Module</option>
+                              {modules.map((mod) => (
+                                  <option key={mod.id} value={mod.file_name}>
+                                      {mod.file_name}
+                                  </option>
+                              ))}
+                          </select>
+                      </div>
+                      <button
+                          className="Next"
+                          onClick={() =>
+                              handleNavigate(
+                                  `/summaryopt?courseid=${courseId}&module=${selectedModule}`
+                              )
+                          }
+                          disabled={!selectedModule} // disable button if no module is selected
+                      >
+                          Next
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  );
+  
 }
 export default ModuleChoice

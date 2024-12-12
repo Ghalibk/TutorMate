@@ -20,9 +20,12 @@ from rest_framework.views import APIView
 # Application Imports
 from .models import Course, Enroll, User, Todo, Module#, UploadedFile
 from .sync import userDataSync
-from .utils import generate_quiz  # Utility functions
+from .utils import generate_quiz, generate_flashcard, generate_bulletpoints
 
 # External Imports
+from PyPDF2 import PdfReader
+from pptx import Presentation
+from docx import Document
 from datetime import datetime
 import json
 import os
@@ -351,6 +354,237 @@ def get_todo(request):
         print(f"Error fetching To-Do items: {e}")
         return JsonResponse({"status": "error", "message": "An error occurred while fetching To-Do items"}, status=500)
 
+def extract_text_from_file(file_path):
+    """Extract text from PDF, PPTX, or DOCX."""
+    try:
+        _, file_extension = os.path.splitext(file_path)
+
+        if file_extension.lower() == ".pdf":
+            text = ""
+            reader = PdfReader(file_path)
+            for page in reader.pages:
+                text += page.extract_text()
+            return text
+
+        elif file_extension.lower() == ".pptx":
+            text = ""
+            presentation = Presentation(file_path)
+            for slide in presentation.slides:
+                for shape in slide.shapes:
+                    if shape.has_text_frame:
+                        for paragraph in shape.text_frame.paragraphs:
+                            text += paragraph.text
+            return text
+
+        elif file_extension.lower() == ".docx":
+            text = ""
+            doc = Document(file_path)
+            for paragraph in doc.paragraphs:
+                text += paragraph.text
+            return text
+
+        else:
+            raise ValueError("Unsupported file type")
+
+    except Exception as e:
+        print(f"Error extracting text: {e}")
+        return None
+
+
+@csrf_exempt
+def generate_quiz_view(request):
+    if request.method == "POST":
+        try:
+            # Parse the JSON body
+            data = json.loads(request.body)
+            course_id = data.get("course_id")
+            module_name = data.get("module_name")
+            difficulty = data.get("difficulty")
+            num_questions = data.get("num_questions")
+
+            # Validate input
+            if not course_id or not module_name or not difficulty or not num_questions:
+                return JsonResponse(
+                    {"status": "error", "message": "All fields are required."},
+                    status=400,
+                )
+
+            # Validate difficulty level
+            if difficulty not in ["easy", "medium", "difficult"]:
+                return JsonResponse(
+                    {"status": "error", "message": "Invalid difficulty level."},
+                    status=400,
+                )
+
+            # Validate num_questions
+            try:
+                num_questions = int(num_questions)
+                if num_questions < 1 or num_questions > 50:
+                    raise ValueError
+            except ValueError:
+                return JsonResponse(
+                    {
+                        "status": "error",
+                        "message": "Number of questions must be between 1 and 50.",
+                    },
+                    status=400,
+                )
+
+            extracted_text = extract_text_from_file(f"./modules/{course_id}/{module_name}")
+            if not extracted_text:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to extract text from the file."},
+                    status=400,
+                )
+
+            quiz_json_string = generate_quiz(difficulty, num_questions, extracted_text)
+            try:
+                quiz_data = json.loads(quiz_json_string)
+            except json.JSONDecodeError:
+                return JsonResponse(
+                    {"status": "error", "message": "Invalid JSON format from OpenAI."},
+                    status=500,
+                )
+            return JsonResponse({"status": "success", "quiz": quiz_data}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400,
+            )
+        except Exception as e:
+            print(f"Error generating quiz: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500,
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405,
+        )
+    
+
+@csrf_exempt
+def generate_flashcards_view(request):
+    if request.method == "POST":
+        try:
+            # Parse the JSON body
+            data = json.loads(request.body)
+            course_id = data.get("course_id")
+            module_name = data.get("module_name")
+
+            # Validate input
+            if not course_id or not module_name:
+                return JsonResponse(
+                    {"status": "error", "message": "Course ID and module name are required."},
+                    status=400,
+                )
+
+            # Path to the module file
+            module_file_path = f"./modules/{course_id}/{module_name}"
+
+            # Extract text from the module file
+            extracted_text = extract_text_from_file(module_file_path)
+            if not extracted_text:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to extract text from the module file."},
+                    status=400,
+                )
+
+            # Generate flashcards using AI
+            flashcards = generate_flashcard(extracted_text)
+            if not flashcards:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to generate flashcards."},
+                    status=500,
+                )
+
+            # Return the generated flashcards
+            return JsonResponse(
+                {"status": "success", "flashcards": flashcards},
+                status=200,
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400,
+            )
+        except Exception as e:
+            print(f"Error generating flashcards: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500,
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405,
+        )
+
+@csrf_exempt
+def generate_bulletpoints_view(request):
+    if request.method == "POST":
+        try:
+            # Parse the JSON body
+            data = json.loads(request.body)
+            course_id = data.get("course_id")
+            module_name = data.get("module_name")
+
+            # Validate input
+            if not course_id or not module_name:
+                return JsonResponse(
+                    {"status": "error", "message": "Course ID and module name are required."},
+                    status=400
+                )
+
+            module_file_path = f"./modules/{course_id}/{module_name}"
+            # Extract text from the module file
+            extracted_text = extract_text_from_file(module_file_path)
+            if not extracted_text:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to extract text from the module."},
+                    status=400
+                )
+
+            # Generate the bullet points using AI
+            bullet_points = generate_bulletpoints(extracted_text)
+
+            # Ensure the response is formatted correctly
+            if not bullet_points:
+                return JsonResponse(
+                    {"status": "error", "message": "Failed to generate bullet points."},
+                    status=500
+                )
+
+            # Return the generated bullet points
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "summary": {
+                        "bullet_points": bullet_points
+                    }
+                },
+                status=200
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400
+            )
+        except Exception as e:
+            print(f"Error generating bullet points: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
 
 
 

@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // For extracting the course ID from the URL
+import { useLocation } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 
 import "./Quizzes.css";
 
 function Quizzes() {
-  const location = useLocation(); // To access the URL query parameters
-  const [courseId, setCourseId] = useState(null); // Store the course ID
-  const [modules, setModules] = useState([]); // List of modules fetched from the API
-  const [module, setModule] = useState(""); // Selected module
-  const [difficulty, setDifficulty] = useState(""); // Selected difficulty
-  const [numQuestions, setNumQuestions] = useState(5); // Number of questions
-  const [quizGenerated, setQuizGenerated] = useState(false); // Whether the quiz is generated
+  const location = useLocation();
+  const [courseId, setCourseId] = useState(null);
+  const [modules, setModules] = useState([]);
+  const [module, setModule] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [numQuestions, setNumQuestions] = useState(5);
+  const [quizGenerated, setQuizGenerated] = useState(false);
+  const [quiz, setQuiz] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [showResults, setShowResults] = useState(false);
+  const [score, setScore] = useState(0);
+  const [error, setError] = useState(null);
 
-  // Extract the course ID from the URL and fetch the list of modules
+  const handleNavigate = (path) => {
+    window.location.href = path;
+  };
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get("courseid");
     setCourseId(id);
 
     if (id) {
-      // Fetch modules from the API
       fetch(`/api/modules/?courseid=${id}`)
         .then((response) => {
           if (!response.ok) {
@@ -30,18 +37,73 @@ function Quizzes() {
           return response.json();
         })
         .then((data) => {
-          setModules(data.modules || []); // Set the modules from the API response
+          setModules(data.modules || []);
         })
         .catch((error) => {
           console.error("Error fetching modules:", error);
-          setModules([]); // Reset modules in case of an error
+          setModules([]);
         });
     }
   }, [location.search]);
 
   const handleGenerateQuiz = () => {
-    // Handle quiz generation logic here
-    setQuizGenerated(true);
+    if (!module || !difficulty || !numQuestions) {
+      setError("Please select a module, difficulty, and number of questions.");
+      return;
+    }
+
+    setError(null);
+
+    fetch("/api/generate-quiz/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        course_id: courseId,
+        module_name: module,
+        difficulty: difficulty,
+        num_questions: numQuestions,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to generate quiz");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === "success") {
+          setQuiz(data.quiz.quiz);
+          setQuizGenerated(true);
+          setShowResults(false); // Reset results view
+          setAnswers({});
+          setScore(0);
+        } else {
+          throw new Error(data.message || "Error generating quiz");
+        }
+      })
+      .catch((error) => {
+        console.error("Error generating quiz:", error);
+        setError("Failed to generate the quiz. Please try again.");
+      });
+  };
+
+  const handleAnswerChange = (questionId, selectedOption) => {
+    setAnswers({ ...answers, [questionId]: selectedOption });
+  };
+
+  const handleSubmitQuiz = () => {
+    let calculatedScore = 0;
+
+    quiz.questions.forEach((question) => {
+      if (answers[question.question_id] === question.correct_option) {
+        calculatedScore += 1;
+      }
+    });
+
+    setScore(calculatedScore);
+    setShowResults(true);
   };
 
   return (
@@ -52,7 +114,7 @@ function Quizzes() {
         <div className="content">
           <div className="quizzes-container">
             <h2>Generate Your Quiz</h2>
-            {/* Forms for modules, difficulty, and number of questions */}
+            {error && <p className="error">{error}</p>}
             {!quizGenerated ? (
               <div className="quiz-form">
                 <div className="form-group">
@@ -103,15 +165,70 @@ function Quizzes() {
               </div>
             ) : (
               <div className="quiz-generated">
-                <h3>Quiz Generated for {module}</h3>
-                <p>Difficulty: {difficulty}</p>
-                <p>Number of Questions: {numQuestions}</p>
-                {/* Here you can render the quiz questions dynamically */}
+                <h3>{quiz?.title || "Quiz"}</h3>
+                <div className="quiz-questions">
+                  {quiz?.questions?.map((question) => (
+                    <div key={question.question_id} className="quiz-question">
+                      <p>
+                        <strong>Q{question.question_id}:</strong>{" "}
+                        {question.question_text}
+                      </p>
+                      <ul>
+                        {question.options.map((option) => (
+                          <li key={option.option_id}>
+                            <label>
+                              <input
+                                type="radio"
+                                name={`question_${question.question_id}`}
+                                value={option.option_id}
+                                onChange={() =>
+                                  handleAnswerChange(
+                                    question.question_id,
+                                    option.option_id
+                                  )
+                                }
+                              />
+                              {option.option_id.toUpperCase()}: {option.text}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                {!showResults ? (
+                  <button onClick={handleSubmitQuiz} className="btn-submit">
+                    Submit Quiz
+                  </button>
+                ) : (
+                  <div className="quiz-results">
+                    <h4>Your Score: {score} / {quiz.questions.length}</h4>
+                    {quiz.questions.map((question) => (
+                      <div key={question.question_id} className="quiz-result">
+                        <p>
+                          <strong>Q{question.question_id}:</strong>{" "}
+                          {question.question_text}
+                        </p>
+                        <p>
+                          <strong>Your Answer:</strong>{" "}
+                          {answers[question.question_id]?.toUpperCase() || "Not Answered"}
+                        </p>
+                        <p>
+                          <strong>Correct Answer:</strong>{" "}
+                          {question.correct_option.toUpperCase()}
+                        </p>
+                        <p>
+                          <strong>Explanation:</strong> {question.explanation}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <button
-                  onClick={() => setQuizGenerated(false)}
+                  onClick={() => handleNavigate("../quizzes?courseid=" + courseId)}
                   className="btn-reset"
                 >
-                  Reset Quiz
+                  Generate Another Quiz
                 </button>
               </div>
             )}

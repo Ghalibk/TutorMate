@@ -1,0 +1,55 @@
+{
+  "quiz": {
+    "title": "States of Consciousness Quiz",
+    "questions": [
+      {
+        "question_id": 1,
+        "question_text": "What is the global brain workspace responsible for in the regulation of awareness?",
+        "options": [
+          { "option_id": "a", "text": "Regulating alertness vs. relaxed/drowsy states" },
+          { "option_id": "b", "text": "Controlling automatic processes" },
+          { "option_id": "c", "text": "Managing executive functions" },
+          { "option_id": "d", "text": "Enhancing subconscious awareness" }
+        ],
+        "correct_option": "a",
+        "explanation": "The global brain workspace regulates alertness vs. relaxed/drowsy states in the awareness process."
+      },
+      {
+        "question_id": 2,
+        "question_text": "Which individuals are noted to lack the Theory of Mind Module (TOMM)?",
+        "options": [
+          { "option_id": "a", "text": "Individuals with autism spectrum disorder" },
+          { "option_id": "b", "text": "Individuals with sleep disorders" },
+          { "option_id": "c", "text": "Individuals with meditation practices" },
+          { "option_id": "d", "text": "Individuals with hypnosis experiences" }
+        ],
+        "correct_option": "a",
+        "explanation": "Individuals with autism spectrum disorder are known to lack the Theory of Mind Module (TOMM)."
+      },
+      {
+        "question_id": 3,
+        "question_text": "What is the primary function of the suprachiasmatic nucleus in biological rhythms?",
+        "options": [
+          { "option_id": "a", "text": "Monitoring circadian rhythms" },
+          { "option_id": "b", "text": "Regulating alertness levels" },
+          { "option_id": "c", "text": "Controlling neurotransmitter levels" },
+          { "option_id": "d", "text": "Enhancing subconscious awareness" }
+        ],
+        "correct_option": "a",
+        "explanation": "The suprachiasmatic nucleus is responsible for monitoring circadian rhythms in biological rhythms."
+      },
+      {
+        "question_id": 4,
+        "question_text": "What is the primary neurotransmitter involved in addiction within the brain?",
+        "options": [
+          { "option_id": "a", "text": "Dopamine" },
+          { "option_id": "b", "text": "Serotonin" },
+          { "option_id": "c", "text": "Norepinephrine" },
+          { "option_id": "d", "text": "Acetylcholine" }
+        ],
+        "correct_option": "a",
+        "explanation": "Dopamine is the primary neurotransmitter involved in addiction within the brain's reward pathway."
+      }
+    ]
+  }
+}
