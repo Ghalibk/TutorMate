@@ -324,6 +324,37 @@ def get_modules(request):
 
     return JsonResponse({"modules": list(modules)}, status=200)
 
+def get_todo(request):
+    course_id = request.GET.get("courseid")
+    if not course_id:
+        return JsonResponse({"status": "error", "message": "Course ID is required"}, status=400)
+
+    try:
+        todos = Todo.objects.filter(course__course_id=course_id)
+
+        if not todos.exists():
+            # Return a response indicating no To-Do items found
+            return JsonResponse(
+                {"status": "success", "message": "No To-Do items found", "assignment_names": []},
+                status=200,
+            )
+
+        # Serialize only the assignment_name
+        assignment_names = [todo.assignment_name for todo in todos]
+
+        return JsonResponse(
+            {"status": "success", "assignment_names": assignment_names},
+            status=200,
+        )
+
+    except Exception as e:
+        print(f"Error fetching To-Do items: {e}")
+        return JsonResponse({"status": "error", "message": "An error occurred while fetching To-Do items"}, status=500)
+
+
+
+
+
 '''
 @csrf_exempt
 def upload_file(request):
