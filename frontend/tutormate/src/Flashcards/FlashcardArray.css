@@ -1,108 +1,113 @@
 .FlashcardArrayWrapper {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 500px;
-    height: auto;
-    padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 500px;
+  height: auto;
+  padding: 20px; /* Reduced padding */
   
-    @media (max-width: 625px) {
-      width: 90%;
-    }
+  /* Positioning to account for sidebar and avoid overlapping */
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 100px); /* Adjusted to shift right for sidebar */
+  transform: translate(-50%, -50%);
+
+  @media (max-width: 625px) {
+    width: 90%;
+    left: calc(50% + 50px); /* Adjust for smaller screens */
   }
-  
-  .FlashcardArrayWrapper * {
-    box-sizing: border-box;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder {
-    perspective: 1000px;
-    width: 100%;
-    height: 500px;
-    width: 500px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1),
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3) {
-    opacity: 0;
-    box-shadow: none;
-    pointer-events: none;
-    visibility: hidden;
-    background: transparent;
-    display: block !important;
-    transform-style: preserve-3d;
-    transition: transform 0.24s ease, opacity 0.12s linear !important;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1) {
-    z-index: 5;
-    right: unset;
-    width: 0px !important;
-    transform: translateX(-16%) rotateY(16deg) translateZ(0) !important;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1)
-    .FlashcardWrapper__item--content {
-    display: none;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3) {
-    z-index: 5;
-    width: 0px !important;
-    left: unset;
-    transform: translateX(16%) rotateY(-16deg) translateZ(0) !important;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3)
-    .FlashcardWrapper__item--content {
-    display: none;
-  }
-  
-  .FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(2) {
-    z-index: 6;
-    box-shadow: none;
-    background: transparent;
-    display: block !important;
-    transform-style: preserve-3d;
-    transition: transform 0.24s ease, opacity 0.12s linear !important;
-  }
-  
-  .FlashcardArrayWrapper__controls {
-    gap: 35px;
-    width: 100%;
-    height: 40px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .FlashcardArrayWrapper__controls button {
-    padding: 0;
-    border: none;
-    font-size: 40px;
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    transition: all 0.12s cubic-bezier(0.47, 0, 0.745, 0.715);
-  }
-  
-  .FlashcardArrayWrapper__controls button svg {
-    height: 80%;
-    cursor: pointer;
-  }
-  
-  .FlashcardArrayWrapper__controls--count {
-    font-size: 15px !important;
-  }
-  
+}
+
+.FlashcardArrayWrapper * {
+  box-sizing: border-box;
+}
+
+.FlashcardArrayWrapper__CardHolder {
+  perspective: 1000px;
+  width: 100%;
+  height: 400px; /* Reduced height */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1),
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3) {
+  opacity: 0;
+  box-shadow: none;
+  pointer-events: none;
+  visibility: hidden;
+  background: transparent;
+  display: block !important;
+  transform-style: preserve-3d;
+  transition: transform 0.24s ease, opacity 0.12s linear !important;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1) {
+  z-index: 5;
+  right: unset;
+  width: 0px !important;
+  transform: translateX(-16%) rotateY(16deg) translateZ(0) !important;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(1)
+  .FlashcardWrapper__item--content {
+  display: none;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3) {
+  z-index: 5;
+  width: 0px !important;
+  left: unset;
+  transform: translateX(16%) rotateY(-16deg) translateZ(0) !important;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(3)
+  .FlashcardWrapper__item--content {
+  display: none;
+}
+
+.FlashcardArrayWrapper__CardHolder .FlashcardWrapper:nth-child(2) {
+  z-index: 6;
+  box-shadow: none;
+  background: transparent;
+  display: block !important;
+  transform-style: preserve-3d;
+  transition: transform 0.24s ease, opacity 0.12s linear !important;
+}
+
+.FlashcardArrayWrapper__controls {
+  gap: 35px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.FlashcardArrayWrapper__controls button {
+  padding: 0;
+  border: none;
+  font-size: 40px;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transition: all 0.12s cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+
+.FlashcardArrayWrapper__controls button svg {
+  height: 80%;
+  cursor: pointer;
+}
+
+.FlashcardArrayWrapper__controls--count {
+  font-size: 15px !important;
+}
