@@ -44,10 +44,9 @@ function BulletPoint() {
 
         if (data.status === "success") {
           try {
-            // Safely parse the bullet points
-            const parsedData = JSON.parse(data.summary.bullet_points);
-            const bulletPoints = parsedData?.bullet_points || [];
-            setBulletPoints(bulletPoints);
+            // Parse the stringified JSON in `summary.bullet_points`
+            const parsedSummary = JSON.parse(data.summary).bullet_points;
+            setBulletPoints(parsedSummary);
           } catch (err) {
             console.error("Error parsing bullet points:", err);
             throw new Error("Invalid format for bullet points.");

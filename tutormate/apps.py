@@ -20,7 +20,7 @@ class TutorMateConfig(AppConfig):
             # Check if the database connection is ready
             try:
                 with connection.cursor():
-                    if os.environ.get('RUN_MAIN'):
+                    if not os.environ.get('RUN_MAIN'):
                         print("Database connection is ready.")
                         threading.Thread(target=run_periodic_sync, daemon=True).start()
             except Exception as e:

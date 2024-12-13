@@ -23,6 +23,7 @@ todo/
 activate.bat
 myenv/
 migrations/
+history/
 
 # Python version file
 .python-version

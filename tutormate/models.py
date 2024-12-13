@@ -52,20 +52,71 @@ class Module(models.Model):
     def __str__(self):
         return f"{self.file_name} for {self.course.name}"
     
-# ToDo model
+class Quiz(models.Model):
+    quiz_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    module_name = models.CharField(max_length=255)
+    difficulty = models.CharField(max_length=255)
+    num_questions = models.IntegerField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="quizzes")  # Updated related_name
+
+    class Meta:
+        db_table = "quiz"
+
+    def __str__(self):
+        return f"Quiz {self.quiz_id} for User {self.user.username}"
+
+
+class Flashcard(models.Model):
+    flashcard_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    module_name = models.CharField(max_length=255)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="flashcards")  # Updated related_name
+
+    class Meta:
+        db_table = "flashcard"
+
+    def __str__(self):
+        return f"Flashcard {self.flashcard_id}"
+
+
+class Bulletpoint(models.Model):
+    bulletpoint_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    module_name = models.CharField(max_length=255)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="bulletpoints")  # Updated related_name
+
+    class Meta:
+        db_table = "bulletpoint"
+
+    def __str__(self):
+        return f"Bulletpoint {self.bulletpoint_id}"
+
+
+class Fullsummary(models.Model):
+    fullsummary_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    module_name = models.CharField(max_length=255)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="fullsummaries")  # Updated related_name
+
+    class Meta:
+        db_table = "fullsummary"
+
+    def __str__(self):
+        return f"Fullsummary {self.fullsummary_id}"
+
+
 class Todo(models.Model):
-    todo_id = models.IntegerField(primary_key=True)  # Assignment ID as the primary key
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="todos")  # Foreign key to Course table
-    assignment_name = models.CharField(max_length=255)  # Assignment name
-    due_date = models.CharField(max_length=255)  # Due date of the assignment
-    assignment_url = models.TextField()  # URL of the assignment
+    todo_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    module_name = models.CharField(max_length=255)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="todos")  # Kept related_name for Todo
 
     class Meta:
         db_table = "todo"
 
     def __str__(self):
-        return f"{self.assignment_name} ({self.due_date})"
-
+        return f"Todo {self.todo_id}"
 # # Material Model
 class Material(models.Model):
     material_id = models.AutoField(primary_key=True)
@@ -88,15 +139,6 @@ class Material(models.Model):
 
     def __str__(self):
         return self.name
-
-# Quiz model
-class Quiz(models.Model):
-    quiz_id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, null=True, blank=True)  # Optional link to Material
-    def __str__(self):
-        return self.title
 
 # Question model
 class Question(models.Model):

@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Application Imports
-from .models import Course, Enroll, User, Todo, Module#, UploadedFile
+from .models import Course, Enroll, User, Todo, Module, Quiz, Flashcard, Bulletpoint, Fullsummary
 from .sync import userDataSync
 from .utils import generate_quiz, generate_flashcard, generate_bulletpoints, generate_full_summary, generate_todo_help
 
@@ -404,270 +404,175 @@ def extract_text_from_file(file_path):
         print(f"Error extracting text: {e}")
         return None
 
+def save_json_to_file(directory, filename, data):
+    # Ensure the directory exists
+    os.makedirs(directory, exist_ok=True)
+    
+    # Write the JSON data to the specified file
+    with open(os.path.join(directory, filename), "w") as file:
+        json.dump(data, file, indent=4)
 
 @csrf_exempt
 def generate_quiz_view(request):
     if request.method == "POST":
         try:
-            # Parse the JSON body
             data = json.loads(request.body)
             course_id = data.get("course_id")
             module_name = data.get("module_name")
             difficulty = data.get("difficulty")
             num_questions = data.get("num_questions")
 
-            # Validate input
+            # Validate inputs
             if not course_id or not module_name or not difficulty or not num_questions:
-                return JsonResponse(
-                    {"status": "error", "message": "All fields are required."},
-                    status=400,
-                )
-
-            # Validate difficulty level
+                return JsonResponse({"status": "error", "message": "All fields are required."}, status=400)
+            
             if difficulty not in ["easy", "medium", "difficult"]:
-                return JsonResponse(
-                    {"status": "error", "message": "Invalid difficulty level."},
-                    status=400,
-                )
+                return JsonResponse({"status": "error", "message": "Invalid difficulty level."}, status=400)
 
-            # Validate num_questions
-            try:
-                num_questions = int(num_questions)
-                if num_questions < 1 or num_questions > 50:
-                    raise ValueError
-            except ValueError:
-                return JsonResponse(
-                    {
-                        "status": "error",
-                        "message": "Number of questions must be between 1 and 50.",
-                    },
-                    status=400,
-                )
+            num_questions = int(num_questions)
+            if num_questions < 1 or num_questions > 50:
+                return JsonResponse({"status": "error", "message": "Number of questions must be between 1 and 50."}, status=400)
 
             extracted_text = extract_text_from_file(f"./modules/{course_id}/{module_name}")
             if not extracted_text:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to extract text from the file."},
-                    status=400,
-                )
+                return JsonResponse({"status": "error", "message": "Failed to extract text from the file."}, status=400)
 
             quiz_json_string = generate_quiz(difficulty, num_questions, extracted_text)
-            try:
-                quiz_data = json.loads(quiz_json_string)
-            except json.JSONDecodeError:
-                return JsonResponse(
-                    {"status": "error", "message": "Invalid JSON format from OpenAI."},
-                    status=500,
-                )
+            quiz_data = json.loads(quiz_json_string)
+
+            quiz = Quiz.objects.create(
+                user_id=request.session["id"],
+                module_name=module_name,
+                difficulty=difficulty,
+                num_questions=num_questions,
+                course_id=course_id
+            )
+
+            # Save to file
+            save_json_to_file(f"./history/{request.session["id"]}/quizzes/", f"{quiz.quiz_id}.json", quiz_data)
+
             return JsonResponse({"status": "success", "quiz": quiz_data}, status=200)
 
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid JSON format."},
-                status=400,
-            )
         except Exception as e:
             print(f"Error generating quiz: {e}")
-            return JsonResponse(
-                {"status": "error", "message": "An unexpected error occurred."},
-                status=500,
-            )
-    else:
-        return JsonResponse(
-            {"status": "error", "message": "Invalid request method."},
-            status=405,
-        )
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred."}, status=500)
+
     
 
 @csrf_exempt
 def generate_flashcards_view(request):
     if request.method == "POST":
         try:
-            # Parse the JSON body
             data = json.loads(request.body)
             course_id = data.get("course_id")
             module_name = data.get("module_name")
 
-            # Validate input
             if not course_id or not module_name:
-                return JsonResponse(
-                    {"status": "error", "message": "Course ID and module name are required."},
-                    status=400,
-                )
+                return JsonResponse({"status": "error", "message": "Course ID and module name are required."}, status=400)
 
-            # Path to the module file
             module_file_path = f"./modules/{course_id}/{module_name}"
-
-            # Extract text from the module file
             extracted_text = extract_text_from_file(module_file_path)
             if not extracted_text:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to extract text from the module file."},
-                    status=400,
-                )
+                return JsonResponse({"status": "error", "message": "Failed to extract text from the module file."}, status=400)
 
-            # Generate flashcards using AI
             flashcards = generate_flashcard(extracted_text)
+            flashcard_data = json.loads(flashcards)
             if not flashcards:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to generate flashcards."},
-                    status=500,
-                )
+                return JsonResponse({"status": "error", "message": "Failed to generate flashcards."}, status=500)
 
-            # Return the generated flashcards
-            return JsonResponse(
-                {"status": "success", "flashcards": flashcards},
-                status=200,
+            flashcard = Flashcard.objects.create(
+                user_id=request.session["id"],
+                module_name=module_name,
+                course_id=course_id  # Include course_id
             )
+            # Save to file
+            save_json_to_file(f"./history/{request.session["id"]}/flashcards/", f"{flashcard.flashcard_id}.json", flashcard_data)
 
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid JSON format."},
-                status=400,
-            )
+            return JsonResponse({"status": "success", "flashcards": flashcards}, status=200)
+
         except Exception as e:
             print(f"Error generating flashcards: {e}")
-            return JsonResponse(
-                {"status": "error", "message": "An unexpected error occurred."},
-                status=500,
-            )
-    else:
-        return JsonResponse(
-            {"status": "error", "message": "Invalid request method."},
-            status=405,
-        )
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred."}, status=500)
+
 
 @csrf_exempt
 def generate_bulletpoints_view(request):
     if request.method == "POST":
         try:
-            # Parse the JSON body
             data = json.loads(request.body)
             course_id = data.get("course_id")
             module_name = data.get("module_name")
 
-            # Validate input
             if not course_id or not module_name:
-                return JsonResponse(
-                    {"status": "error", "message": "Course ID and module name are required."},
-                    status=400
-                )
+                return JsonResponse({"status": "error", "message": "Course ID and module name are required."}, status=400)
 
             module_file_path = f"./modules/{course_id}/{module_name}"
-            # Extract text from the module file
             extracted_text = extract_text_from_file(module_file_path)
             if not extracted_text:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to extract text from the module."},
-                    status=400
-                )
+                return JsonResponse({"status": "error", "message": "Failed to extract text from the module."}, status=400)
 
-            # Generate the bullet points using AI
             bullet_points = generate_bulletpoints(extracted_text)
-
-            # Ensure the response is formatted correctly
             if not bullet_points:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to generate bullet points."},
-                    status=500
-                )
+                return JsonResponse({"status": "error", "message": "Failed to generate bullet points."}, status=500)
 
-            # Return the generated bullet points
-            return JsonResponse(
-                {
-                    "status": "success",
-                    "summary": {
-                        "bullet_points": bullet_points
-                    }
-                },
-                status=200
-            )
+            bulletpoint_data=json.loads(bullet_points)
 
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid JSON format."},
-                status=400
+            bulletpoint = Bulletpoint.objects.create(
+                user_id=request.session["id"],
+                module_name=module_name,
+                course_id=course_id  # Include course_id
             )
+            # Save to file
+            save_json_to_file(f"./history/{request.session["id"]}/bulletpoints/", f"{bulletpoint.bulletpoint_id}.json", bulletpoint_data)
+
+            return JsonResponse({"status": "success", "summary": bullet_points}, status=200)
+
         except Exception as e:
             print(f"Error generating bullet points: {e}")
-            return JsonResponse(
-                {"status": "error", "message": "An unexpected error occurred."},
-                status=500
-            )
-    else:
-        return JsonResponse(
-            {"status": "error", "message": "Invalid request method."},
-            status=405
-        )
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred."}, status=500)
+
     
 @csrf_exempt
 def generate_fullsummary_view(request):
     if request.method == "POST":
         try:
-            # Parse the JSON body
             data = json.loads(request.body)
             course_id = data.get("course_id")
             module_name = data.get("module_name")
-            summary_type = data.get("summary_type")
 
-            # Validate input
-            if not course_id or not module_name or not summary_type:
-                return JsonResponse(
-                    {"status": "error", "message": "Course ID, module name, and summary type are required."},
-                    status=400
-                )
+            if not course_id or not module_name:
+                return JsonResponse({"status": "error", "message": "Course ID, module name, and summary type are required."}, status=400)
 
             module_file_path = f"./modules/{course_id}/{module_name}"
-            # Ensure the module file exists
             if not os.path.exists(module_file_path):
-                return JsonResponse(
-                    {"status": "error", "message": "Module file does not exist."},
-                    status=404
-                )
+                return JsonResponse({"status": "error", "message": "Module file does not exist."}, status=404)
 
-            # Extract text from the module file
             extracted_text = extract_text_from_file(module_file_path)
             if not extracted_text:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to extract text from the module."},
-                    status=400
-                )
+                return JsonResponse({"status": "error", "message": "Failed to extract text from the module."}, status=400)
 
-            # Generate the full summary using AI
             full_summary = generate_full_summary(extracted_text)
-
-            # Ensure the response is formatted correctly
             if not full_summary:
-                return JsonResponse(
-                    {"status": "error", "message": "Failed to generate full summary."},
-                    status=500
-                )
+                return JsonResponse({"status": "error", "message": "Failed to generate full summary."}, status=500)
 
-            # Return the generated full summary
-            return JsonResponse(
-                {
-                    "status": "success",
-                    "summary": full_summary
-                },
-                status=200
+            # Save to file
+            fs_data = json.loads(full_summary)
+
+            fullsummary = Fullsummary.objects.create(
+                user_id=request.session["id"],
+                module_name=module_name,
+                course_id=course_id  # Include course_id
             )
 
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid JSON format."},
-                status=400
-            )
+            # Save to file
+            save_json_to_file(f"./history/{request.session["id"]}/fullsummaries/", f"{fullsummary.fullsummary_id}.json", fs_data)
+
+            return JsonResponse({"status": "success", "summary": full_summary}, status=200)
+
         except Exception as e:
             print(f"Error generating full summary: {e}")
-            return JsonResponse(
-                {"status": "error", "message": "An unexpected error occurred."},
-                status=500
-            )
-    else:
-        return JsonResponse(
-            {"status": "error", "message": "Invalid request method."},
-            status=405
-        )
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred."}, status=500)
+
 
 @csrf_exempt
 def generate_steps_for_todos_view(request):
@@ -731,43 +636,148 @@ def generate_steps_for_todos_view(request):
             {"status": "error", "message": "Invalid request method."},
             status=405,
         )
-
-'''
+    
 @csrf_exempt
-def upload_file(request):
-    if request.method == 'POST':
-        if 'file' not in request.FILES:
-            return JsonResponse({'status': 'error', 'message': 'No file uploaded.'}, status=400)
-
-        file = request.FILES['file']
-        file_extension = os.path.splitext(file.name)[1].lower()
-
-        if file_extension not in ['.pptx', '.pdf', '.docx']:
-            return JsonResponse({'status': 'error', 'message': 'Invalid file type.'}, status=400)
-
-        # Save file temporarily
-        temp_file_path = default_storage.save(f'temp/{file.name}', ContentFile(file.read()))
-        full_temp_path = default_storage.path(temp_file_path)
-
+def get_user_quizzes_view(request):
+    if request.method == "GET":
         try:
-            # Extract text from the file
-            extracted_text = extract_text_from_file(full_temp_path, file_extension)
+            # Ensure the user is authenticated
+            if not request.user.is_authenticated:
+                return JsonResponse(
+                    {"status": "error", "message": "User is not authenticated."}, status=401
+                )
 
-            # Generate quiz from the extracted content
-            quiz = generate_quiz(extracted_text)  # Using generate_quiz from util.py
+            # Get the user's ID from the session or request.user
+            user_id = request.session.get("id") or request.user.id
 
-            # Return the extracted text and the generated quiz in the response
-            return JsonResponse({
-                'status': 'success', 
-                'text': extracted_text, 
-                'quiz': quiz
-            })
+            if not user_id:
+                return JsonResponse(
+                    {"status": "error", "message": "User ID is missing from the session."},
+                    status=400
+                )
+
+            # Fetch quizzes for the specific user
+            quizzes = Quiz.objects.filter(user_id=user_id)
+
+            # Prepare the quizzes data
+            quizzes_data = [
+                {
+                    "quiz_id": quiz.quiz_id,
+                    "module_name": quiz.module_name,
+                    "difficulty": quiz.difficulty,
+                    "num_questions": quiz.num_questions,
+                    "course_name": quiz.course.name,
+                }
+                for quiz in quizzes
+            ]
+
+            return JsonResponse({"status": "success", "quizzes": quizzes_data}, status=200)
+
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-        finally:
-            # Clean up temporary file
-            if os.path.exists(full_temp_path):
-                os.remove(full_temp_path)
+            print(f"Error fetching user quizzes: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "Failed to fetch quizzes."},
+                status=500
+            )
     else:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-        '''
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."}, status=405
+        )
+    
+@csrf_exempt
+def get_quiz_view(request):
+    if request.method == "GET":
+        try:
+            # Extract the quiz ID from the query parameters
+            quiz_id = request.GET.get("quizid")
+            user_id = request.session.get("id")  # Get the user ID from the session
+
+            if not quiz_id:
+                return JsonResponse(
+                    {"status": "error", "message": "Quiz ID is required."},
+                    status=400
+                )
+            
+            if not user_id:
+                return JsonResponse(
+                    {"status": "error", "message": "User is not authenticated."},
+                    status=401
+                )
+
+            # Construct the file path
+            file_path = f"./history/{user_id}/quizzes/{quiz_id}.json"
+
+            # Check if the file exists
+            if not os.path.exists(file_path):
+                return JsonResponse(
+                    {"status": "error", "message": "Quiz file not found."},
+                    status=404
+                )
+
+            # Load the quiz data from the file
+            with open(file_path, "r") as file:
+                quiz_data = json.load(file)
+
+            return JsonResponse(
+                {"status": "success", "quiz": quiz_data},
+                status=200
+            )
+
+        except Exception as e:
+            print(f"Error loading quiz: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+    
+def get_summaries_view(request):
+    try:
+        # Fetch user ID from the authenticated session
+        user_id = request.session["id"]
+
+        # Fetch all summaries for the logged-in user
+        flashcards = Flashcard.objects.filter(user_id=user_id)
+        bullet_points = Bulletpoint.objects.filter(user_id=user_id)
+        full_summaries = Fullsummary.objects.filter(user_id=user_id)
+
+        # Structure the response
+        response_data = {
+            "status": "success",
+            "flashcards": [
+                {
+                    "flashcard_id": flashcard.flashcard_id,
+                    "module_name": flashcard.module_name,
+                    "course_name": flashcard.course.name if flashcard.course else None,
+                }
+                for flashcard in flashcards
+            ],
+            "bullet_points": [
+                {
+                    "bulletpoint_id": bulletpoint.bulletpoint_id,
+                    "module_name": bulletpoint.module_name,
+                    "course_name": bulletpoint.course.name if bulletpoint.course else None,
+                }
+                for bulletpoint in bullet_points
+            ],
+            "full_summaries": [
+                {
+                    "fullsummary_id": fullsummary.fullsummary_id,
+                    "module_name": fullsummary.module_name,
+                    "course_name": fullsummary.course.name if fullsummary.course else None,
+                }
+                for fullsummary in full_summaries
+            ],
+        }
+
+        return JsonResponse(response_data, status=200)
+
+    except Exception as e:
+        # Handle any unexpected errors
+        return JsonResponse(
+            {"status": "error", "message": str(e)}, status=500
+        )

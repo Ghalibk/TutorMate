@@ -37,6 +37,9 @@ urlpatterns = [
     path("api/generate-bulletpoints/", views.generate_bulletpoints_view, name="generate_bulletpoints"),
     path("api/generate-fullsummary/", views.generate_fullsummary_view, name="generate_fullsummary"),
     path("api/generate-steps/", views.generate_steps_for_todos_view, name="generate_steps"),
+    path('api/get-user-quizzes/', views.get_user_quizzes_view, name='get-user-quizzes'),
+    path("api/get-quiz/", views.get_quiz_view, name="get_quiz"),
+    path("api/get-summaries/", views.get_summaries_view, name="get_summaries"),
     path('oauth2/', include('django_auth_adfs.urls')),
     #path('upload-file/', upload_file, name='upload_file'), # pptx, pdf, word
     #path('summarize-course/', SummarizeCourseView.as_view(), name='summarize-course'), # Add the SummarizeCourseView URL

@@ -1,64 +1,81 @@
-/* Container for the quiz item */
-.SummaryContainer {
-    background: #f1f5f9; /* Deep blue background for the card */
-    
+.SummariesContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to next row if needed */
+    justify-content: flex-start; /* Align cards to the left */
+    gap: 20px; /* Add consistent space between cards */
+    padding: 20px; /* Add padding to the container */
+    max-width: 1200px; /* Set a max-width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.SummaryCard {
+    background: #f1f5f9; /* Background for the card */
     padding: 20px;
-    margin: 150px auto;
     border-radius: 20px; /* Softer corners */
-    width: 80%; /* Make it responsive */
-    max-width: 400px;
+    width: calc(33.333% - 20px); /* Ensure three cards per row with gap accounted */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover effect for the quiz container */
-.SummaryContainer:hover {
+/* Hover effect for the card */
+.SummaryCard:hover {
     transform: scale(1.05);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Subtle lift effect */
+}
+
+.FlashcardsSection, .BulletPointsSection, .FullSummariesSection {
+    width: 100%; /* Ensure sections span the full width */
+    margin-bottom: 40px; /* Add space between sections */
 }
 
 /* Quiz ID text */
 .SummaryID {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #1e40af; /* White for emphasis */
+    color: #1e40af;
     margin-bottom: 10px;
-    font-family: 'Poppins', sans-serif; /* Consistent modern font */
-    letter-spacing: 1px; /* Modern typography touch */
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
 }
 
 /* Module description */
 .SummaryModule {
     font-size: 1rem;
     margin-bottom: 20px;
-    color: #1e40af; /* Light gray for secondary text */
-    font-family: 'Poppins', sans-serif; /* Consistent modern font */
+    color: #1e40af;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* View Quiz button */
+/* View Summary button */
 .ViewSummary {
-    background: linear-gradient(135deg, #3498db, #5dade2); /* Gradient button matching theme */
-    color: #ffffff; /* White text for contrast */
+    background: linear-gradient(135deg, #3498db, #5dade2);
+    color: #ffffff;
     font-size: 1rem;
     font-weight: 700;
     padding: 12px 20px;
     border: none;
-    border-radius: 10px; /* Softer corners */
+    border-radius: 10px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover effect for the button */
 .ViewSummary:hover {
-    background: linear-gradient(135deg, #1d4ed8, #1e40af); /* Darker gradient on hover */
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Consistent hover shadow */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
-    .SummaryContainer {
-        width: 90%; /* Adjust width for smaller screens */
+    .SummaryCard {
+        width: calc(50% - 20px); /* Two cards per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .SummaryCard {
+        width: 100%; /* Single card per row on very small screens */
     }
 }
