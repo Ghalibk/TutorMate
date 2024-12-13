@@ -1,47 +1,68 @@
 .search-bar {
-    width: 98%;
-    padding: 10px 0;
-    margin-right: 10px;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #CBDCEB; /* Light blue border */
-    border-radius: 5px;
-    font-size: 16px;
-    color: #133E87; /* Deep blue text */
-    background-color: white; /* Light cream background */
-  }
-  
-  .search-bar input:focus {
-    outline: none;
-    border-color: #608BC1; /* Lighter blue on focus */
-  }
-  .search-bar img {
-    width: 20px;
-    margin-right: 10px;
+  width: 100%; /* Use full width for alignment */
+  padding: 10px;
+  margin: 0 auto; /* Center horizontally */
+  display: flex; /* Flex layout for alignment */
+  align-items: center; /* Center vertically */
+  background-color: #f5f7fa; /* Light, modern background */
+  border-radius: 8px; /* Rounded corners for modern look */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  gap: 10px; /* Space between icon and input */
+}
+
+.search-bar img {
+  width: 24px; /* Adjust icon size */
+  height: 24px; /* Consistent icon dimensions */
+  cursor: pointer; /* Pointer for clickable icons */
+}
+
+.search-bar input {
+  flex: 1; /* Input takes remaining space */
+  padding: 12px 15px; /* Comfortable padding */
+  border: 1px solid #CBDCEB; /* Light blue border */
+  border-radius: 6px; /* Match container radius */
+  font-size: 16px; /* Modern font size */
+  color: #133E87; /* Deep blue text color */
+  background-color: white; /* Clean background */
+  transition: all 0.3s ease; /* Smooth transition for focus */
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #608BC1; /* Enhanced blue border on focus */
+  box-shadow: 0 0 0 3px rgba(96, 139, 193, 0.25); /* Highlight effect */
+}
+
+.search-bar input::placeholder {
+  color: #9aa5b1; /* Subtle placeholder text color */
+  font-style: italic; /* Distinct placeholder text */
 }
 
 @media (max-width: 768px) {
+  .search-bar {
+    padding: 8px; /* Adjust padding for medium screens */
+  }
+
   .search-bar input {
-      font-size: 14px; /* Slightly smaller text for smaller screens */
-      padding: 8px; /* Reduced padding */
+    font-size: 14px; /* Slightly smaller text for medium screens */
+    padding: 10px; /* Adjust padding */
   }
 }
 
 @media (max-width: 480px) {
   .search-bar {
-      flex-direction: column; /* Stack icon and input vertically */
-      gap: 5px; /* Reduce spacing in smaller devices */
+    flex-direction: column; /* Stack elements vertically */
+    padding: 6px; /* Compact padding for small screens */
   }
-  
+
   .search-bar img {
-      width: 18px; /* Smaller icon */
+    width: 20px; /* Smaller icon size */
+    height: 20px; /* Maintain aspect ratio */
   }
 
   .search-bar input {
-      font-size: 14px; /* Smaller font for mobile */
-      padding: 6px; /* Compact padding for narrow screens */
+    font-size: 14px; /* Smaller font for narrow screens */
+    padding: 8px; /* Compact padding for input */
+    width: 100%; /* Full width for small devices */
   }
 }
