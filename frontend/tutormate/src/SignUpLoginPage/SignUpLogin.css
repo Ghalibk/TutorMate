@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #0078d4, #0053a6); /* Match button gradient */
+  background: white!important;
   display: flex;
   justify-content: center;
   align-items: center;
