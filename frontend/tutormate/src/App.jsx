@@ -22,7 +22,9 @@ import PastWork from "./PastWork/PastWork.jsx";
 import ViewPastQuiz from "./PastWork/ViewPastQuiz.jsx";
 import ViewPastSummary from "./PastWork/ViewPastSummary.jsx";
 import DisplayQuiz from "./PastWork/DisplayQuiz.jsx";
-import DisplaySummary from "./PastWork/DisplaySummary.jsx";
+import DisplayFlashcard from "./PastWork/DisplayFlashcard.jsx";
+import DisplayBulletpoint from "./PastWork/DisplayBulletpoint.jsx";
+import DisplayFullsummary from "./PastWork/DisplayFullsummary.jsx";
 import "./App.css";
 
 function App() {
@@ -51,7 +53,9 @@ function App() {
         <Route path="/viewpastquiz" element={<ViewPastQuiz />} />
         <Route path="/viewpastsummary" element={<ViewPastSummary />} />
         <Route path="/displayquiz" element={<DisplayQuiz />} />
-        <Route path="/displaysummary" element={<DisplaySummary />} />
+        <Route path="/displayflashcard" element={<DisplayFlashcard />} />
+        <Route path="/displaybulletpoint" element={<DisplayBulletpoint />} />
+        <Route path="/displayfullsummary" element={<DisplayFullsummary />} />
       </Routes>
     </BrowserRouter>
   );

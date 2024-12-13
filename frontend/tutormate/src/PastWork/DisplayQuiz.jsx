@@ -71,80 +71,76 @@ function DisplayQuiz() {
       <div className="main">
         <SearchBar />
         <div className="content">
-          <div className="DisplayQuiz">
-            <h3 className="title">Quiz</h3>
-            <br />
-            {loading ? (
-              <p>Loading quiz...</p>
-            ) : error ? (
-              <p className="error">{error}</p>
-            ) : quiz ? (
-              <div className="quiz-generated">
-                <h3>{quiz?.title || "Quiz"}</h3>
-                <div className="quiz-questions">
-                  {quiz?.questions?.map((question) => (
-                    <div key={question.question_id} className="quiz-question">
-                      <p>
+        {loading ? (
+            <p>Loading quiz...</p>
+        ) : error ? (
+            <p className="error">{error}</p>
+        ) : quiz ? (
+            <div className="quiz-generated">
+            <h3>{quiz?.title || "Quiz"}</h3>
+            <div className="quiz-questions">
+                {quiz?.questions?.map((question) => (
+                <div key={question.question_id} className="quiz-question">
+                    <p>
+                    <strong>Q{question.question_id}:</strong>{" "}
+                    {question.question_text}
+                    </p>
+                    <ul>
+                    {question.options.map((option) => (
+                        <li key={option.option_id}>
+                        <label>
+                            <input
+                            type="radio"
+                            name={`question_${question.question_id}`}
+                            value={option.option_id}
+                            onChange={() =>
+                                handleAnswerChange(
+                                question.question_id,
+                                option.option_id
+                                )
+                            }
+                            />
+                            {option.option_id.toUpperCase()}: {option.text}
+                        </label>
+                        </li>
+                    ))}
+                    </ul>
+                </div>
+                ))}
+            </div>
+            {!showResults ? (
+                <button onClick={handleSubmitQuiz} className="btn-submit">
+                Submit Quiz
+                </button>
+            ) : (
+                <div className="quiz-results">
+                <h4>Your Score: {score} / {quiz.questions.length}</h4>
+                {quiz.questions.map((question) => (
+                    <div key={question.question_id} className="quiz-result">
+                    <p>
                         <strong>Q{question.question_id}:</strong>{" "}
                         {question.question_text}
-                      </p>
-                      <ul>
-                        {question.options.map((option) => (
-                          <li key={option.option_id}>
-                            <label>
-                              <input
-                                type="radio"
-                                name={`question_${question.question_id}`}
-                                value={option.option_id}
-                                onChange={() =>
-                                  handleAnswerChange(
-                                    question.question_id,
-                                    option.option_id
-                                  )
-                                }
-                              />
-                              {option.option_id.toUpperCase()}: {option.text}
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
+                    </p>
+                    <p>
+                        <strong>Your Answer:</strong>{" "}
+                        {answers[question.question_id]?.toUpperCase() ||
+                        "Not Answered"}
+                    </p>
+                    <p>
+                        <strong>Correct Answer:</strong>{" "}
+                        {question.correct_option.toUpperCase()}
+                    </p>
+                    <p>
+                        <strong>Explanation:</strong> {question.explanation}
+                    </p>
                     </div>
-                  ))}
+                ))}
                 </div>
-                {!showResults ? (
-                  <button onClick={handleSubmitQuiz} className="btn-submit">
-                    Submit Quiz
-                  </button>
-                ) : (
-                  <div className="quiz-results">
-                    <h4>Your Score: {score} / {quiz.questions.length}</h4>
-                    {quiz.questions.map((question) => (
-                      <div key={question.question_id} className="quiz-result">
-                        <p>
-                          <strong>Q{question.question_id}:</strong>{" "}
-                          {question.question_text}
-                        </p>
-                        <p>
-                          <strong>Your Answer:</strong>{" "}
-                          {answers[question.question_id]?.toUpperCase() ||
-                            "Not Answered"}
-                        </p>
-                        <p>
-                          <strong>Correct Answer:</strong>{" "}
-                          {question.correct_option.toUpperCase()}
-                        </p>
-                        <p>
-                          <strong>Explanation:</strong> {question.explanation}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p>No quiz available.</p>
             )}
-          </div>
+            </div>
+        ) : (
+            <p>No quiz available.</p>
+        )}
         </div>
       </div>
     </div>

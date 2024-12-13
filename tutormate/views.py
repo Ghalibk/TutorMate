@@ -781,3 +781,156 @@ def get_summaries_view(request):
         return JsonResponse(
             {"status": "error", "message": str(e)}, status=500
         )
+    
+@csrf_exempt
+def get_flashcard_view(request):
+    if request.method == "GET":
+        try:
+            # Extract the flashcard ID from the query parameters
+            flashcard_id = request.GET.get("flashcard_id")
+            user_id = request.session.get("id")  # Get the user ID from the session
+
+            if not flashcard_id:
+                return JsonResponse(
+                    {"status": "error", "message": "Flashcard ID is required."},
+                    status=400,
+                )
+            
+            if not user_id:
+                return JsonResponse(
+                    {"status": "error", "message": "User is not authenticated."},
+                    status=401,
+                )
+
+            # Construct the file path
+            file_path = f"./history/{user_id}/flashcards/{flashcard_id}.json"
+
+            # Check if the file exists
+            if not os.path.exists(file_path):
+                return JsonResponse(
+                    {"status": "error", "message": "Flashcard file not found."},
+                    status=404,
+                )
+
+            # Load the flashcard data from the file
+            with open(file_path, "r") as file:
+                flashcard_data = json.load(file)
+
+            return JsonResponse(
+                {"status": "success", "flashcards": flashcard_data},
+                status=200,
+            )
+
+        except Exception as e:
+            print(f"Error loading flashcard: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500,
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405,
+        )
+    
+@csrf_exempt
+def get_bulletpoint_view(request):
+    if request.method == "GET":
+        try:
+            # Extract bullet point ID from query parameters
+            bulletpoint_id = request.GET.get("bulletpoint_id")
+            user_id = request.session.get("id")  # User ID from the session
+
+            if not bulletpoint_id:
+                return JsonResponse(
+                    {"status": "error", "message": "Bullet point ID is required."},
+                    status=400
+                )
+
+            if not user_id:
+                return JsonResponse(
+                    {"status": "error", "message": "User is not authenticated."},
+                    status=401
+                )
+
+            # File path for the bullet point summary
+            file_path = f"./history/{user_id}/bulletpoints/{bulletpoint_id}.json"
+
+            # Check if the file exists
+            if not os.path.exists(file_path):
+                return JsonResponse(
+                    {"status": "error", "message": "Bullet point file not found."},
+                    status=404
+                )
+
+            # Read the bullet point data from the file
+            with open(file_path, "r") as file:
+                bulletpoint_data = json.load(file)
+
+            return JsonResponse(
+                {"status": "success", "bullet_points": bulletpoint_data},
+                status=200
+            )
+
+        except Exception as e:
+            print(f"Error loading bullet points: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+    
+@csrf_exempt
+def get_fullsummary_view(request):
+    if request.method == "GET":
+        try:
+            # Extract the full summary ID from the query parameters
+            fullsummary_id = request.GET.get("fullsummary_id")
+            user_id = request.session.get("id")  # Fetch user ID from session
+
+            if not fullsummary_id:
+                return JsonResponse(
+                    {"status": "error", "message": "Full summary ID is required."},
+                    status=400,
+                )
+            
+            if not user_id:
+                return JsonResponse(
+                    {"status": "error", "message": "User is not authenticated."},
+                    status=401,
+                )
+
+            # Construct the file path
+            file_path = f"./history/{user_id}/fullsummaries/{fullsummary_id}.json"
+
+            # Check if the file exists
+            if not os.path.exists(file_path):
+                return JsonResponse(
+                    {"status": "error", "message": "Full summary file not found."},
+                    status=404,
+                )
+
+            # Load the summary data from the file
+            with open(file_path, "r") as file:
+                summary_data = json.load(file)
+
+            return JsonResponse(
+                {"status": "success", "summary": summary_data},
+                status=200,
+            )
+
+        except Exception as e:
+            print(f"Error loading full summary: {e}")
+            return JsonResponse(
+                {"status": "error", "message": "An unexpected error occurred."},
+                status=500,
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405,
+        )
