@@ -1,71 +1,82 @@
 .Choices {
     display: flex;
-    justify-content: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-    flex-direction: column;
-    gap: 20px; /* Add spacing between items */
-    margin: 130px;
+    justify-content: space-around; /* Spread items horizontally with equal spacing */
+    align-items: flex-start; /* Align items at the top */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 30px; /* Space between items */
+    margin: 50px auto; /* Center the container and adjust margin */
     padding: 30px;
     border-radius: 20px; /* Larger rounding for consistency */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
     background: linear-gradient(to bottom right, #ffffff, #f1f5f9); /* Matching soft gradient background */
+    max-width: 1200px; /* Limit the container width */
 }
 
 .PastQuiz, .PastSummaries {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #f1f5f9; /* Deep blue card background */
-    border-radius: 20px; /* Larger rounding */
-    padding: 20px;
+    background: #ffffff; /* Clean white background */
+    border: 2px solid #608BC1; /* Subtle blue border for contrast */
+    border-radius: 16px; /* Softer rounded corners */
+    padding: 25px;
     margin: 15px;
-    width: 45%;
+    width: 300px; /* Fixed width for uniformity */
     max-width: 300px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .PastQuiz:hover, .PastSummaries:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Subtle lift */
+    transform: scale(1.05); /* Subtle lift effect */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 .text {
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Slightly larger font for emphasis */
     font-weight: 700;
-    color: #1e40af; /* Light neutral text for contrast */
-    margin-bottom: 15px;
-    font-family: 'Poppins', sans-serif; /* Consistent font */
-    letter-spacing: 1px; /* Modern typography touch */
+    color: #1e40af; /* Deep blue text */
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif; /* Consistent modern font */
+    letter-spacing: 1px; /* Clean typography */
 }
 
 .ViewPastQuiz, .ViewPastSummary {
-    background: linear-gradient(135deg, #3498db, #5dade2); /* Gradient matching button style */
+    background: linear-gradient(135deg, #3498db, #5dade2); /* Blue gradient for buttons */
     color: #ffffff; /* White text for contrast */
     border: none;
-    padding: 12px 20px;
+    padding: 15px 25px; /* Larger padding for a modern button feel */
     font-size: 1rem;
     font-weight: 700;
-    border-radius: 10px; /* Softer corners */
+    border-radius: 12px; /* Softer button corners */
     cursor: pointer;
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ViewPastQuiz:hover, .ViewPastSummary:hover {
     background: linear-gradient(135deg, #1d4ed8, #1e40af); /* Darker gradient on hover */
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Consistent hover shadow */
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 @media (max-width: 768px) {
     .Choices {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        align-items: center; /* Center items */
+        gap: 20px; /* Adjust spacing for smaller screens */
     }
 
     .PastQuiz, .PastSummaries {
-        width: 90%; /* Consistent responsive behavior */
+        width: 90%; /* Full width for small screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .Choices {
+        padding: 20px; /* Compact padding for narrow screens */
+        gap: 15px; /* Adjust gap for narrow screens */
+    }
+
+    .ViewPastQuiz, .ViewPastSummary {
+        font-size: 0.9rem; /* Slightly smaller button text */
+        padding: 10px 20px; /* Compact padding for buttons */
     }
 }
