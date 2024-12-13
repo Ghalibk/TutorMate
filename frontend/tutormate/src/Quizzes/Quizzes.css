@@ -82,47 +82,134 @@ label {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Updated quiz-generated styles */
 .quiz-generated {
-  background: #e0f2fe; /* Light blue card background */
-  border-radius: 20px;
+  background: #ffffff; /* Clean white background */
+  border-radius: 20px; /* Rounded corners */
   padding: 40px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   width: 100%;
-  max-width: 500px;
+  max-width: 800px; /* Wider container for questions */
+  margin: 20px auto; /* Center horizontally */
   color: #1e293b; /* Neutral dark text */
 }
 
-h3 {
+.quiz-generated h3 {
   font-size: 2rem;
   margin-bottom: 15px;
-  color: #1e40af; /* Deep blue for subheaders */
   font-weight: 700;
+  color: #1e40af; /* Deep blue for the title */
+  text-align: left; /* Align title to the left */
 }
 
-.quiz-generated p {
-  margin: 10px 0;
+.quiz-questions {
+  margin-bottom: 20px; /* Space below questions section */
+}
+
+.quiz-question {
+  margin-bottom: 15px; /* Space between questions */
+  padding: 15px;
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 10px; /* Rounded corners */
+  background-color: #f9fafb; /* Light gray background for contrast */
+}
+
+.quiz-question p {
+  font-size: 1.1rem; /* Slightly larger font for readability */
+  font-weight: 600;
+  color: #334155; /* Neutral dark color */
+  margin-bottom: 10px;
+}
+
+.quiz-question ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+.quiz-question li {
+  margin-bottom: 10px; /* Space between options */
+  font-size: 1rem; /* Standard size for options */
+}
+
+.quiz-question label {
+  display: flex;
+  align-items: center; /* Align radio button and text */
+  gap: 10px; /* Space between radio button and text */
+  font-weight: 500;
+  color: #475569; /* Subtle text color for options */
+  cursor: pointer; /* Pointer cursor for better UX */
+}
+
+.quiz-question input[type="radio"] {
+  accent-color: #2563eb; /* Custom blue radio button */
+  transform: scale(1.2); /* Slightly larger for accessibility */
+  cursor: pointer;
+}
+
+.btn-submit {
+  display: inline-block;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Blue gradient */
+  color: #ffffff; /* White text */
   font-size: 1rem;
-  color: #64748b; /* Neutral gray text for less emphasis */
+  font-weight: 600;
+  border: none;
+  border-radius: 8px; /* Rounded button */
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #1e40af, #1d4ed8); /* Darker hover effect */
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+
+.quiz-results {
+  margin-top: 20px;
+  padding: 20px;
+  background: #e0f2fe; /* Light blue background for results */
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for results */
+  color: #1e293b; /* Neutral dark text */
+}
+
+.quiz-results h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e40af; /* Blue for the score */
+  margin-bottom: 15px;
+}
+
+.quiz-result {
+  margin-bottom: 15px; /* Space between individual result entries */
+}
+
+.quiz-result p {
+  font-size: 1rem;
+  margin: 5px 0; /* Spacing between lines */
+  color: #64748b; /* Neutral gray for less emphasized text */
 }
 
 .btn-reset {
-  display: block;
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(90deg, #64748b, #4b5563); /* Gradient for secondary button */
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #64748b, #4b5563); /* Gray gradient */
   color: #ffffff; /* White text */
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px; /* Rounded button */
   cursor: pointer;
   transition: all 0.3s ease, transform 0.2s ease;
 }
 
 .btn-reset:hover {
-  background: linear-gradient(90deg, #4b5563, #1e293b); /* Darker gradient on hover */
+  background: linear-gradient(135deg, #4b5563, #1e293b); /* Darker hover effect */
   transform: translateY(-3px); /* Lift effect */
-  box-shadow: 0 5px 15px rgba(75, 85, 99, 0.3); /* Subtle glow */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
 }
 
 /* Responsive design */
@@ -138,9 +225,14 @@ h3 {
   }
 
   .btn-generate,
+  .btn-submit,
   .btn-reset {
     font-size: 1rem;
     padding: 12px;
+  }
+
+  .quiz-results {
+    padding: 15px;
   }
 }
 
@@ -150,8 +242,9 @@ h3 {
   }
 
   .btn-generate,
+  .btn-submit,
   .btn-reset {
     font-size: 0.9rem;
     padding: 10px;
   }
-} 
+}
