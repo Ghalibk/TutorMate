@@ -5,6 +5,46 @@
   font-family: Arial, sans-serif;
   overflow: hidden;
 }
+.sort-toggle {
+  margin: 20px 0; /* Add space above and below the element */
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Center items vertically */
+  gap: 12px; /* Space between label and dropdown */
+  padding: 10px 15px; /* Add padding around the container */
+  background-color: #f5f7fa; /* Subtle background color for a modern look */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.sort-toggle label {
+  font-size: 16px; /* Slightly larger, modern font size */
+  font-weight: 600; /* Bold text for the label */
+  color: #333; /* Dark gray for text color */
+}
+
+.sort-toggle select {
+  padding: 10px 12px; /* Add spacing inside the dropdown */
+  font-size: 14px; /* Modern, readable font size */
+  font-weight: 500; /* Medium font weight for modern look */
+  color: #444; /* Slightly lighter gray for text */
+  background-color: #fff; /* White background for contrast */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 6px; /* Rounded corners */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  outline: none; /* Remove outline on focus */
+  transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+.sort-toggle select:hover {
+  border-color: #888; /* Slightly darker border on hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.sort-toggle select:focus {
+  border-color: #007bff; /* Blue border on focus for accessibility */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Highlight effect on focus */
+}
+
 
 .Courses-container {
   display: flex;

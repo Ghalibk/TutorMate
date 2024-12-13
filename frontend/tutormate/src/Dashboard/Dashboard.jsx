@@ -6,6 +6,7 @@ import "./Dashboard.css";
 
 function Dashboard() {
   const [courses, setCourses] = useState([]); // State to store courses
+  const [sortBy, setSortBy] = useState("default"); // State for sorting option
 
   // Fetch courses when the component mounts
   useEffect(() => {
@@ -27,17 +28,39 @@ function Dashboard() {
     fetchCourses();
   }, []);
 
+  // Function to sort courses based on selected option
+  const getSortedCourses = () => {
+    if (sortBy === "grade") {
+      return [...courses].sort((a, b) => a.overall_grade - b.overall_grade);
+    }
+    return courses; // Default order
+  };
+
   return (
     <div className="dashboard">
       <Sidebar />
       <div className="main">
         <SearchBar />
+        {/* Sort toggle */}
+        <div className="sort-toggle">
+          <label htmlFor="sort-options">Sort By:</label>
+          <select
+            id="sort-options"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="default">Default</option>
+            <option value="grade">Priority</option>
+          </select>
+        </div>
+
         <div className="content">
           <h1>Welcome to the Dashboard</h1>
           <div className="Courses-container">
             {courses.length > 0 ? (
-              courses.map((course) => (
+              getSortedCourses().map((course) => (
                 <Courses
+                  key={course.id} // Unique key for mapped elements
                   CourseID={course.id}
                   CourseName={course.name}
                   CourseSemester={course.term_name}
