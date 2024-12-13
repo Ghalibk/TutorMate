@@ -1,46 +1,86 @@
 .BulletPt {
-    background-color: #F3F3E0;
-    border: 3px solid #608BC1; 
-    border-radius: 12px; 
-    padding: 25px;
-    margin: 20px auto; 
-    width: 85%; 
+    background-color: #ffffff; /* Clean white background */
+    border: 3px solid #608BC1; /* Blue border for a professional touch */
+    border-radius: 16px; /* Slightly larger rounded corners */
+    padding: 30px; /* Increased padding for spacious layout */
+    margin: 20px auto; /* Centered layout */
+    width: 85%; /* Responsive width */
     height: auto;
-    max-width: 800px; 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
-    color: #133E87; 
-    font-family: 'Arial', sans-serif; 
-    overflow-y: auto;
+    max-width: 800px; /* Limit maximum width for readability */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Deeper shadow for modern depth */
+    color: #133E87; /* Deep blue text for contrast */
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
+    overflow-y: auto; /* Enable scrolling if needed */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.BulletPt:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 .title {
-    font-size: 26px;
-    font-weight: bold;
-    color: #133E87; 
-    margin-bottom: 20px;
-    text-align: left; 
-    text-decoration: underline; 
+    font-size: 28px; /* Slightly larger title size */
+    font-weight: 700; /* Bold font weight */
+    color: #133E87; /* Deep blue color */
+    margin-bottom: 15px; /* Reduced spacing for compactness */
+    text-align: left; /* Left-aligned for professionalism */
+    border-left: 6px solid #608BC1; /* Blue accent border */
+    padding-left: 10px; /* Space for accent border */
 }
 
 .summary {
-    font-size: 18px;
-    line-height: 1.8; 
-    color: #333; 
-    text-align: justify; 
-    word-wrap: break-word; 
+    font-size: 18px; /* Standard text size for readability */
+    line-height: 1.8; /* Comfortable line spacing */
+    color: #475569; /* Subtle gray-blue text */
+    text-align: justify; /* Justify text for a clean look */
+    word-wrap: break-word; /* Handle long text gracefully */
+    padding-left: 15px; /* Indent for list styling */
+    position: relative; /* For bullet icon styling */
+}
+
+.summary li {
+    margin-bottom: 12px; /* Space between bullet points */
+    position: relative; /* For bullet icon alignment */
+}
+
+.summary li::before {
+    content: ''; /* Custom bullet point */
+    position: absolute;
+    left: -20px; /* Position the bullet */
+    top: 8px; /* Align vertically */
+    width: 8px; /* Bullet size */
+    height: 8px; /* Bullet size */
+    background-color: #608BC1; /* Blue bullet color */
+    border-radius: 50%; /* Circular bullets */
 }
 
 @media (max-width: 768px) {
     .BulletPt {
-        padding: 15px;
-        width: 90%;
+        padding: 20px; /* Adjust padding for smaller screens */
+        width: 90%; /* Slightly wider for small screens */
     }
 
     .title {
-        font-size: 20px;
+        font-size: 22px; /* Smaller title for medium screens */
     }
 
     .summary {
-        font-size: 14px; 
+        font-size: 16px; /* Smaller text for medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .BulletPt {
+        padding: 15px; /* Compact padding for narrow screens */
+        width: 95%; /* Full width for mobile */
+    }
+
+    .title {
+        font-size: 20px; /* Smaller title for mobile */
+    }
+
+    .summary {
+        font-size: 14px; /* Smaller text size for mobile */
     }
 }
