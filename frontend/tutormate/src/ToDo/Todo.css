@@ -1,51 +1,80 @@
 .Todo {
-    background-color: #f1f5f9; /* Light cream background */
-    border: 2px solid #CBDCEB; /* Light blue border */
-    border-radius: 10px;
-    padding: 20px;
-    width: 700px;
-    margin: 15px auto; /* Center it */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
-  
-  .Todo .Title {
-    color: #133E87; /* Deep blue */
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-  
-  .Todo .description {
-    font-size: 16px;
-    color: #608BC1; /* Medium blue */
-    margin-bottom: 20px;
-    line-height: 1.5; /* Improve readability */
-  }
-  
-  .Todo .ShowSteps {
-    background-color: #133E87; /* Deep blue background */
-    color: #F3F3E0; /* Light cream text */
-    font-size: 16px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .Todo .ShowSteps:hover {
-    background-color: #608BC1; /* Lighter blue on hover */
-    transform: scale(1.05); /* Slightly enlarge */
-  }
-  
-  .Todo .ShowSteps:active {
-    background-color: #133E87; /* Return to original deep blue */
-    transform: scale(1); /* Reset scale */
-  }
-  @media (max-width: 768px) {
-    .Todo {
+  background-color: #ffffff; /* Clean white background */
+  border: 2px solid #608BC1; /* Subtle blue border */
+  border-radius: 15px; /* Softer rounded corners */
+  padding: 25px; /* Spacious padding */
+  width: 80%; /* Adaptive width */
+  max-width: 700px; /* Limit maximum width */
+  margin: 20px auto; /* Centered with more margin */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+  font-family: 'Poppins', sans-serif; /* Modern font */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  text-align: left; /* Align all content to the left */
+}
+
+.Todo:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.Todo .Title {
+  color: #133E87; /* Deep blue */
+  font-size: 24px; /* Slightly larger title font */
+  margin-bottom: 15px;
+  font-weight: 700; /* Bold for emphasis */
+  letter-spacing: 1px; /* Modern typography */
+  text-transform: uppercase; /* Make title stand out */
+  text-align: left; /* Ensure title is aligned to the left */
+}
+
+.Todo .description {
+  font-size: 18px; /* Slightly larger for readability */
+  color: #608BC1; /* Medium blue */
+  margin-bottom: 20px;
+  line-height: 1.8; /* Improved line spacing */
+  text-align: justify; /* Justify content for clean layout */
+}
+
+.Todo .ShowSteps {
+  background: linear-gradient(135deg, #3498db, #5dade2); /* Modern blue gradient */
+  color: #ffffff; /* White text for contrast */
+  font-size: 16px;
+  padding: 12px 20px; /* Increased padding for a modern button feel */
+  border: none;
+  border-radius: 8px; /* Softer corners */
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  text-align: center; /* Button text stays centered */
+}
+
+.Todo .ShowSteps:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af); /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Subtle shadow on hover */
+}
+
+.Todo .ShowSteps:active {
+  background: #133E87; /* Deep blue for active state */
+  transform: scale(1); /* Reset scale */
+}
+
+@media (max-width: 768px) {
+  .Todo {
       width: 90%; /* Full width for smaller screens */
-    }
+      padding: 20px; /* Adjust padding for compact devices */
   }
-    
+
+  .Todo .Title {
+      font-size: 20px; /* Adjust title size */
+  }
+
+  .Todo .description {
+      font-size: 16px; /* Adjust description size */
+  }
+
+  .Todo .ShowSteps {
+      font-size: 14px; /* Adjust button size */
+      padding: 10px 15px; /* Compact padding */
+  }
+}
